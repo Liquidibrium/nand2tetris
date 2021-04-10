@@ -45,18 +45,17 @@ CHIP ALU {
         Not16(in=x, out=notX);
         Not16(in=y, out=notY);
 
-        Mux4Way16(a=x, b=notX, c[0..15]=false, d[0..15]=true, sel[1]=zx , sel[0]=nx ,   out=negX);
-        Mux4Way16(a=y, b=notY, c[0..15]=false, d[0..15]=true, sel[1]=zy , sel[0]=ny ,   out=negY);
+        Mux4Way16(a=x, b=notX, c[0..15]=false, d[0..15]=true, sel[1]=zx, sel[0]=nx,   out=znX);
+        Mux4Way16(a=y, b=notY, c[0..15]=false, d[0..15]=true, sel[1]=zy, sel[0]=ny,   out=znY);
        
-        And16(a=negX, b=negY, out=xAndY);
-        Add16(a=negX, b=negY, out=xAddY);
+        And16(a=znX, b=znY, out=xAndY);
+        Add16(a=znX, b=znY, out=xAddY);
         
         Mux16(a=xAndY, b=xAddY, sel=f, out=func);
         Not16(in=func, out=notfunc);
-        Mux16(a=func, b=notfunc, sel=no, out= out, out[15]=ng, out[0..7]=first , out[8..15]=second );
+        Mux16(a=func, b=notfunc, sel=no, out=out, out[15]=ng, out[0..7]=first, out[8..15]=second);
        
         Or16(a[0..7]=first, b[0..7]=second, out[0..7]=or1);
         Or8Way(in=or1 , out=orr);
-    //    Or(a=orfirst, b=orsecond, out=orr);
         Not(in=orr, out=zr);
 }
