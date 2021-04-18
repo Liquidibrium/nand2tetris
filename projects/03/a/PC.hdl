@@ -16,7 +16,7 @@ CHIP PC {
     OUT out[16];
 
     PARTS:    
-    Inc16(in=t, out=pp);                  //010 011
-    Mux8Way16(a=t, b= pp, c=in, d=in, e[0..15]=false, f[0..15]=false, g[0..15]=false, h[0..15]=false, sel[0]=inc, sel[1]=load, sel[2]=reset ,out=out1);
-    Register(in=out1, load=true, out=out , out=t);
+    Inc16(in=t, out=pp); //pp = plus plus                 010 011
+    Mux8Way16(a=t, b= pp, c=in, d=in, e[0..15]=false, f[0..15]=false, g[0..15]=false, h[0..15]=false, sel[0]=inc, sel[1]=load, sel[2]=reset, out=out1);
+    Register(in=out1, load=true, out=out, out=t);
 }
