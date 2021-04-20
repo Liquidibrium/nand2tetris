@@ -29,7 +29,7 @@ M=D // n = R0
 @R1
 D=M
 @m 
-M=D // m =R1 
+M=D // m = R1 
 @mult 
 M=0 // mult = 0
 (LOOP)
@@ -37,9 +37,9 @@ M=0 // mult = 0
 D=M
 @STOP 
 D;JEQ // if m == 0 goto STOP
-D=D-1
+D=D-1 // m -1 
 @m 
-M=D
+M=D // m = m -1 
 @mult
 D=M
 @n
