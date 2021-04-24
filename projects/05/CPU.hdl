@@ -39,5 +39,36 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-    // Put your code here:
+    Not(in=instruction[15], out=notOpcode);
+    Mux16(a=outInside, b=instruction, sel=notOpcode, out=ARegIn);
+
+    Or (a=notOpcode, b=instruction[5], out=ARegLoad); // d1  and opcode
+    
+    ARegister(in=ARegIn, load=ARegLoad, out[0..14]=addressM, out=ARegOut);
+
+    Mux16(a=ARegOut, b=inM, sel=instruction[12], out=aluY); // a 
+
+    And(a=instruction[15], b=instruction[4], out=DRegLoad); // d2 and opcode 
+    DRegister(in=outInside, load=DRegLoad, out=aluX);
+    
+    ALU(x=aluX, y=aluY, zx=instruction[11], nx=instruction[10], zy=instruction[9],
+        ny=instruction[8], f=instruction[7], no=instruction[6],  
+        out=outM, out=outInside, zr=zero, ng=neg);
+
+    And(a=instruction[15], b=instruction[3], out=writeM); // d3 and opcode 
+
+    // should load pc if JGT or JEQ or JLT is true 
+    Not (in=zero, out=notZero);
+    Not (in=neg, out=notNeg);
+    And (a=notZero, b=notNeg, out=pos);
+
+    And (a=pos, b=instruction[0], out=JGT);
+    And (a=zero, b=instruction[1], out=JEQ);
+    And (a=neg, b=instruction[2], out=JLT);
+
+    Or (a=JGT, b=JEQ, out=JGE);
+    Or (a=JLT, b=JGE, out=JMP);
+    // should be c instruction
+    And (a=JMP, b=instruction[15], out=jmp); 
+    PC(in=ARegOut, load=jmp, inc=true, reset=reset, out[0..14]=pc);
 }
