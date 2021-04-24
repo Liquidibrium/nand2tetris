@@ -27,5 +27,15 @@ CHIP Memory {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    DMux4Way(in=load, sel=address[13..14], a=ram1Load, b=ram2load, c=screenLoad, d=kbdLoad);
+    
+
+    // wondering if this is correct or legal 
+    RAM16K(in=in, load=ram1Load, address=address[0..13], out=ram1Out);
+    RAM16K(in=in, load=ram2load, address=address[0..13], out=ram2Out);
+    
+    Screen(in=in, load=screenLoad, address=address[0..12], out=screenOut);
+    Keyboard(out=kbdOut);
+
+    Mux4Way16(a=ram1Out, b=ram2Out, c=screenOut, d=kbdOut, sel=address[13..14], out=out);
 }
