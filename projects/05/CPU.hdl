@@ -43,9 +43,7 @@ CHIP CPU {
     Mux16(a=outInside, b=instruction, sel=notOpcode, out=ARegIn);
 
     Or (a=notOpcode, b=instruction[5], out=ARegLoad); // d1  and opcode
-    
     ARegister(in=ARegIn, load=ARegLoad, out[0..14]=addressM, out=ARegOut);
-
     Mux16(a=ARegOut, b=inM, sel=instruction[12], out=aluY); // a 
 
     And(a=instruction[15], b=instruction[4], out=DRegLoad); // d2 and opcode 
