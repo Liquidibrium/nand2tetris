@@ -1,3 +1,5 @@
+from typing import Tuple
+
 symbols = {
     "SP": 0,
     "LCL": 1,
@@ -77,12 +79,12 @@ comp_dict = {
     "D|M": "1010101",
 }
 
-# global index for new allocated variables
-global_variable_index = 16
 
 # remove comments, which begins with //
 # and remove space, new line and tab characters from line
-def parse_line(line):
+
+
+def parse_line(line: str) -> str:
     index = line.find("//")
     if index != -1:
         line = line[:index]
@@ -90,89 +92,110 @@ def parse_line(line):
 
 
 # translates line to A instruction,
-# the returned value is 16 byte long string,
 # instruction line is passed without "@,
 # if label is in symbool table,
 # then the proper value is returned
 # if not in symbols, new variable is allocated,
 # variable and variable index is add in symbols
-def translate_A_instruction(instruction_line):
-    if instruction_line[0].isdigit():
+# the returned value is 16 byte string
+# and variable index to indicate if allocation occurred
+def translate_A_instruction(
+    instruction_line: str, variable_index: int
+) -> Tuple[str, int]:
+    if instruction_line[0].isdigit():  # check just first symbol
         address = int(instruction_line)
     elif instruction_line in symbols:
         address = symbols[instruction_line]
     else:
-        global global_variable_index
-        symbols[instruction_line] = global_variable_index
-        address = global_variable_index
-        global_variable_index += 1
-    return format(address, "016b")
+        symbols[instruction_line] = variable_index
+        address = variable_index
+        variable_index += 1
+    return (format(address, "016b"), variable_index)
 
 
 # translates line into c binary code
-# instructuin line is looke like this
+# instruction line is looks like this
 # dest = comp ; jump
 # dest and jump is optional
-# so dest_dict and jump_dict contains "" as key for null 
-def translate_C_instruction(instruction_line):
+# so dest_dict and jump_dict contains "" as key for null
+def translate_C_instruction(instruction_line: str) -> str:
     dest_end_index = instruction_line.find("=")
-    compare_start_index = dest_end_index + 1
+    comp_start_index = dest_end_index + 1
     if dest_end_index == -1:
-        compare_start_index = dest_end_index = 0
+        # destination is omittied
+        dest_end_index = 0
+        comp_start_index = 0
+    # if destination is omitted then search key is "", which indicates null
     destination = dest_dict[instruction_line[:dest_end_index]]
 
-    compare_end_index = instruction_line.find(";")
-    jumber_start_index = compare_end_index + 1
-    if compare_end_index == -1:
-        jumber_start_index = compare_end_index = len(instruction_line)
+    comp_end_index = instruction_line.find(";")
+    jump_start_index = comp_end_index + 1
+    if comp_end_index == -1:
+        # jump is omitted
+        comp_end_index = len(instruction_line)
+        jump_start_index = comp_end_index
 
-    compare = comp_dict[instruction_line[compare_start_index:compare_end_index]]
-    jumper = jump_dict[instruction_line[jumber_start_index:]]
-    return "111" + compare + destination + jumper
+    compare = comp_dict[instruction_line[comp_start_index:comp_end_index]]
+
+    # if jump is omitted then search key is "", which indicates null
+    jump = jump_dict[instruction_line[jump_start_index:]]
+    return "111" + compare + destination + jump
 
 
-# lable is add in symbols with line number
-def parse_pseudo_command(line: str, line_number: int):
-    label_symbol = line[:-1]
+# label is add in symbols with line number
+def parse_pseudo_command(line: str, line_number: int) -> None:
+    label_symbol = line[: line.find(")")]
     symbols[label_symbol] = line_number
 
 
-# append line to file
-def fwrite_line(instruction_line, file_name):
-    with open(file_name, "a") as f:
-        print(instruction_line, file=f)
+# write lines in file with mode
+# if mode is w it is used to make empty file
+# if mode is a then new line translated instruction is add
+def fwrite_line(
+    instruction_line: str, file_name: str, mode: str, line_end: str = "\n"
+) -> None:
+    with open(file_name, mode) as f:
+        print(instruction_line, end=line_end, file=f)
 
 
 # filters commnets, spaces and
 # adds labels with proper line number value into symbols
 # middle file is generated and to extension is added t /.asmt
-# middle file name is returned 
-def first_pass(asm_file):
+# middle file name is returned
+def first_pass(asm_file: str) -> str:
     middle_file_name = f"{asm_file}t"
+    fwrite_line("", middle_file_name, "w", "")
     with open(asm_file) as f:
         count_line = 0
         for line in f:
             parsed_line = parse_line(line)
             if parsed_line:
-                if parsed_line[0] == "(": # indicated label 
+                if parsed_line[0] == "(":  # indicated label
                     parse_pseudo_command(line[1:], count_line)
                     continue
                 count_line += 1
-                fwrite_line(parsed_line, middle_file_name) # parseed line is saved into middle file
+                fwrite_line(
+                    parsed_line, middle_file_name, "a"
+                )  # parseed line is saved into middle file
     return middle_file_name
 
 
 # for each line it is A or C instruction,
 # the translated result is out file
-def second_pass(asm_file, out_file_name):
+def second_pass(asm_file: str, out_file_name: str) -> None:
+    fwrite_line("", out_file_name, "w", "")
     with open(asm_file) as f:
+        # index for new allocated variables
+        variable_index = 16
         for line in f:
             line = line.split("\n")[0]
-            if line[0] == "@": # indicates A instruction 
-                instruction = translate_A_instruction(line[1:])
+            if line[0] == "@":  # indicates A instruction
+                instruction, variable_index = translate_A_instruction(
+                    line[1:], variable_index
+                )
             else:
                 instruction = translate_C_instruction(line)
-            fwrite_line(instruction, out_file_name)
+            fwrite_line(instruction, out_file_name, "a")
 
 
 # process file containts two passes
@@ -180,7 +203,6 @@ def second_pass(asm_file, out_file_name):
 # and saves lane labels in symbols, makes temporary file with .asmt
 # on second pass the .asmt file is converted into .hack instructions
 def process_file(asm_file: str) -> None:
-    # file_name = asm_file.split(".asm")[0]
     middle_file = first_pass(asm_file)
     second_pass(middle_file, f"{asm_file}.hack")
 

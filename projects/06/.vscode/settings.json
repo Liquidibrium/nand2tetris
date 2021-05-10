@@ -1,3 +1,11 @@
 {
-    "python.formatting.provider": "black"
+    "python.formatting.provider": "black",
+    "python.linting.mypyEnabled": true,
+    "python.sortImports.path": "isort",
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        "max-line-length = 88",
+        "select = C,E,F,W,B,B950",
+        "ignore =E501,W503"
+    ]
 }
