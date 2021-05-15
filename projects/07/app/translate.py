@@ -1,38 +1,41 @@
-from os import TMP_MAX
+# from os import TMP_MAX
 import os
+from typing import Tuple
+
 filename = ""
 
 
 class Command:
-    def to_asm_code(self):
-        pass
+    @staticmethod
+    def save_memory_value_in_D_register() -> Tuple:
+        return ("D=M",)
 
-    def save_memory_value_in_D_register():
-        return "D=M"
-
-    def stack_pointer_increment():
+    @staticmethod
+    def stack_pointer_increment() -> Tuple:
         return ("@SP", "M=M+1")  # *SP ++
 
-    def stack_pointer_decrement():
+    @staticmethod
+    def stack_pointer_decrement() -> Tuple:
         return ("@SP", "M=M-1")  # *SP--
 
-    def get_stack_pointer_value_in_A():
+    @staticmethod
+    def get_stack_pointer_value_in_A() -> Tuple:
         return ("@SP", "A=M")  # A=*SP
 
-    def SP_value_into_D():  # D = RAM[SP]
-        return (f"@SP", "A=M", "D=M")
+    @staticmethod
+    def SP_value_into_D() -> Tuple:  # D = RAM[SP]
+        return ("@SP", "A=M", "D=M")
 
-    def stack_save_d():
+    @staticmethod
+    def stack_save_d() -> Tuple:
         return ("@SP", "A=M", "M=D")  # *SP = D
 
 
 class Arithmetic(Command):
     count = 0
 
-    def to_asm_code(self):
-        return super().to_asm_code()
-
-    def stack_add():
+    @staticmethod
+    def stack_add() -> Tuple:
         return (
             "//add ",
             "@SP",
@@ -42,7 +45,8 @@ class Arithmetic(Command):
             "M=D+M",
         )
 
-    def stack_sub():
+    @staticmethod
+    def stack_sub() -> Tuple:
         return (
             "//sub",
             "@SP",
@@ -52,7 +56,8 @@ class Arithmetic(Command):
             "M=M-D",
         )
 
-    def stack_and():
+    @staticmethod
+    def stack_and() -> Tuple:
         return (
             "//and",
             "@SP",
@@ -62,7 +67,8 @@ class Arithmetic(Command):
             "M=D&M",
         )
 
-    def stack_or():
+    @staticmethod
+    def stack_or() -> Tuple:
         return (
             "//or",
             "@SP",
@@ -72,7 +78,8 @@ class Arithmetic(Command):
             "M=D|M",
         )
 
-    def stack_not():
+    @staticmethod
+    def stack_not() -> Tuple:
         return (
             "//not",
             "@SP",
@@ -80,7 +87,8 @@ class Arithmetic(Command):
             "M=!M",
         )
 
-    def stack_neg():
+    @staticmethod
+    def stack_neg() -> Tuple:
         return (
             "//neg",
             "@SP",
@@ -88,8 +96,11 @@ class Arithmetic(Command):
             "M=-M",
         )
 
-    def jump(cmd):
+    @staticmethod
+    def jump(cmd: str) -> Tuple:
         Arithmetic.count += 1
+        label_true = f"LABEL.{cmd}.TRUE.{Arithmetic.count}"
+        label_false = f"LABEL.{cmd}.FALSE.{Arithmetic.count}"
         return (
             f"//{cmd}",
             "@SP",
@@ -97,40 +108,41 @@ class Arithmetic(Command):
             "D=M",
             "A=A-1",
             "D=M-D",
-            f"@LABEL.{cmd}.TRUE.{Arithmetic.count}",
+            f"@{label_true}",
             f"D;J{cmd}",
             "@SP",
             "A=M-1",
             "M=0",
-            f"@LABEL.{cmd}.FALSE.{ Arithmetic.count}",
+            f"@{label_false}",
             "0;JMP",
-            f"(LABEL.{cmd}.TRUE.{ Arithmetic.count })",
+            f"({label_true})",
             "@SP",
             "A=M-1",
             "M=-1",
-            f"(LABEL.{cmd}.FALSE.{ Arithmetic.count })",
+            f"({label_false})",
         )
 
-    def stack_gt():
+    @staticmethod
+    def stack_gt() -> Tuple:
         return Arithmetic.jump("GT")
 
-    def stack_lt():
+    @staticmethod
+    def stack_lt() -> Tuple:
         return Arithmetic.jump("LT")
 
-    def stack_eq():
+    @staticmethod
+    def stack_eq() -> Tuple:
         return Arithmetic.jump("EQ")
 
 
 class MemoryAccess(Command):
-    def __init__(self, name) -> None:
+    def __init__(self, name: str) -> None:
         self.name = name
-
-    def to_asm_code(self):
-        return super().to_asm_code()
 
 
 class StackPush(MemoryAccess):
-    def to_asm_code(segment, address):
+    @staticmethod
+    def to_asm_code(segment: str, address: str) -> Tuple:
         if segment == "constant":
             return StackPush.constat(address)
         elif segment == "static":
@@ -142,21 +154,26 @@ class StackPush(MemoryAccess):
         elif segment == "argument":
             return StackPush.segment_pointer("ARG", address)
         elif segment == "pointer":
-            # if address == 0:
-            #     return ("//pointer", "@THIS", "D=M")
-            # return ("//pointer", "@THAT", "D=M")
-                return StackPush.segment_pointer("R3", address, "A")
+            if address == '0':
+                return ("//pointer", "@THIS", "D=M")
+            return ("//pointer", "@THAT", "D=M")
+            # return StackPush.segment_pointer("R3", address, "A")
         else:
             return StackPush.segment_pointer(segment.upper(), address)
 
-    def static(address):  # file.address
+    @staticmethod
+    def static(address: str) -> Tuple:  # file.address
         return (f"//push static {address}", f"@{filename}.{address}", "D=M")
 
-    def constat(address):
+    @staticmethod
+    def constat(address: str) -> Tuple:
         return (f"//push const {address}", f"@{address}", "D=A")
 
     # local/argument/this/that memo = 'm'  ||   memo = "A" | temp R(5+index), pointer - R(3 + index)
-    def segment_pointer(segment, address, memo="M"):  # A -temp, pointer
+    @staticmethod
+    def segment_pointer(
+        segment: str, address: str, memo: str = "M"
+    ) -> Tuple:  # A -temp, pointer
         return (
             f"//push {segment} {address}",
             f"@{address}",
@@ -166,14 +183,10 @@ class StackPush(MemoryAccess):
             "D=M",
         )  # D =*SP
 
-    def push_to_stack():
-        super().get_stack_pointer_value_in_A()
-        "M=D"
-        super().stack_pointer_increment()
-
 
 class StackPop(MemoryAccess):
-    def to_asm_code(segment, address):
+    @staticmethod
+    def to_asm_code(segment: str, address: str) -> Tuple:
         if segment == "static":
             return StackPop.static(address)
         elif segment == "temp":
@@ -183,17 +196,19 @@ class StackPop(MemoryAccess):
         elif segment == "argument":
             return StackPop.segment_pointer("ARG", address)
         elif segment == "pointer":
-            return StackPop.segment_pointer("R3", address, "A")
-            # if address == 0:
-            #     return ("//pointer", "@THIS", "D=A")
-            # return ("//pointer", "@THAT", "D=A")
+            if address == '0':
+                return ("//pointer", "@THIS", "D=A")
+            return ("//pointer", "@THAT", "D=A")
+            # return StackPop.segment_pointer("R3", address, "A")
         else:
             return StackPop.segment_pointer(segment.upper(), address)
 
-    def static(address):
+    @staticmethod
+    def static(address: str) -> Tuple:
         return (f"//pop static {address}", f"@{filename}.{address}", "D=A")
 
-    def segment_pointer(segment, address, memo="M"):
+    @staticmethod
+    def segment_pointer(segment: str, address: str, memo: str = "M") -> Tuple:
         return (
             f"//pop {segment} {address}",
             f"@{segment}",
@@ -223,7 +238,7 @@ PUSH = ("@SP", "A=M", "M=D", "@SP", "M=M+1")
 POP = ("@R13", "M=D", "@SP", "AM=M-1", "D=M", "@R13", "A=M", "M=D")
 
 
-def translate_line(line):
+def translate_line(line: str) -> Tuple:
     words = line.split()
     if words[0] == "push":
         return StackPush.to_asm_code(words[1], words[2]) + PUSH
