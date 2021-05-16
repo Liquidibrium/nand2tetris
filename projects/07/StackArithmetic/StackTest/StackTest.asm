@@ -333,7 +333,7 @@ M=M+1
 AM=M-1
 D=M
 A=A-1
-M=D+M
+M=M+D
 //push const 112
 @112
 D=A
@@ -357,7 +357,7 @@ M=-M
 AM=M-1
 D=M
 A=A-1
-M=D&M
+M=M&D
 //push const 82
 @82
 D=A
@@ -371,7 +371,7 @@ M=M+1
 AM=M-1
 D=M
 A=A-1
-M=D|M
+M=M|D
 //not
 @SP
 A=M-1

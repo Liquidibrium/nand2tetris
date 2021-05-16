@@ -1,5 +1,22 @@
 {
     "python.formatting.provider": "black",
-//     "python.linting.flake8Enabled": true,
-//     "python.linting.mypyEnabled": true
+    "python.linting.flake8Enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.linting.flake8Args": [
+        "max-line-length = 88",
+        "select = C,E,F,W,B,B950 ",
+        "ignore = E501,W503"
+    ],
+    "python.linting.mypyCategorySeverity.note": "Hint",
+    "python.linting.mypyArgs": [
+        "--ignore-missing-imports",
+        "--follow-imports=silent",
+        "--show-column-numbers",
+        "--check-untyped-defs",
+        "--warn-redundant-casts",
+        "--warn-unreachable",
+        "--warn-unused-ignores",
+        "--disallow-untyped-calls",
+        "--disallow-untyped-defs",
+    ]
 }

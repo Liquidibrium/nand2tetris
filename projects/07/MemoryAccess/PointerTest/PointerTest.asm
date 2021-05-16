@@ -6,11 +6,9 @@ A=M
 M=D
 @SP
 M=M+1
-//pop R3 0
-@R3
+//pointer
+@THIS
 D=A
-@0
-D=D+A
 @R13
 M=D
 @SP
@@ -27,11 +25,9 @@ A=M
 M=D
 @SP
 M=M+1
-//pop R3 1
-@R3
+//pointer
+@THAT
 D=A
-@1
-D=D+A
 @R13
 M=D
 @SP
@@ -82,22 +78,16 @@ D=M
 @R13
 A=M
 M=D
-//push R3 0
-@0
-D=A
-@R3
-A=A+D
+//pointer
+@THIS
 D=M
 @SP
 A=M
 M=D
 @SP
 M=M+1
-//push R3 1
-@1
-D=A
-@R3
-A=A+D
+//pointer
+@THAT
 D=M
 @SP
 A=M
@@ -109,7 +99,7 @@ M=M+1
 AM=M-1
 D=M
 A=A-1
-M=D+M
+M=M+D
 //push THIS 2
 @2
 D=A
@@ -143,4 +133,4 @@ M=M+1
 AM=M-1
 D=M
 A=A-1
-M=D+M
+M=M+D
