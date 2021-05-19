@@ -1,14 +1,16 @@
+from typing import Tuple
+
 count_call = 0
 
 
-def function_command(function_name_lable, num_variables):
-    result = (f"({function_name_lable})",)
+def function_command(function_name_lable: str, num_variables: str) -> Tuple[str, ...]:
+    result: Tuple[str, ...] = (f"({function_name_lable})",)
     for _ in range(int(num_variables)):
         result += ("@SP", "D=A", "@SP", "A=M", "M=D", "@SP", "M=M+1")
     return result
 
 
-def pop_arg():
+def pop_arg() -> Tuple:
     return (
         "@ARG",
         "D=M",
@@ -25,11 +27,11 @@ def pop_arg():
     )
 
 
-def return_memory_segment(segment):
+def return_memory_segment(segment: str) -> Tuple:
     return ("@R13", "D=M-1", "AM=D", "D=M", f"@{segment }", "M=D")
 
 
-def return_command():
+def return_command() -> Tuple:
     p_arg = pop_arg()
     tmp1 = (
         "@LCL",
@@ -56,7 +58,7 @@ def return_command():
     return tmp1 + p_arg + tmp2 + that + this + arg + lcl + tmp3
 
 
-def save_memory_segment(segment):
+def save_memory_segment(segment: str) -> Tuple:
     return (
         f"//save {segment}",
         f"@{segment}",
@@ -69,7 +71,9 @@ def save_memory_segment(segment):
     )
 
 
-def call(function_name, num_arguments, lable_pre=None):
+def call(
+    function_name: str, num_arguments: str, lable_pre: str = None
+) -> Tuple[str, ...]:
     global count_call
     count_call += 1
     return_label = f"{function_name}$ret.{count_call}"

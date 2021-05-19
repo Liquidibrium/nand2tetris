@@ -1,36 +1,35 @@
 from typing import Tuple
 
+# class MemoryCommand:
+#     @staticmethod
+#     def to_asm_code(segment: str, address: str) -> Tuple[str, ...]:
+#         pass
 
-class MemoryCommand:
-    @staticmethod
-    def to_asm_code(segment: str, address: str) -> Tuple[str, ...]:
-        pass
+#     @staticmethod
+#     def _filter_segment(segment: str, address: str) -> Tuple[str, ...]:
+#         pass
 
-    @staticmethod
-    def _filter_segment(segment: str, address: str) -> Tuple[str, ...]:
-        pass
+#     @staticmethod
+#     def _static(address: str, file_name: str) -> Tuple[str, ...]:
+#         pass
 
-    @staticmethod
-    def _static(address: str, file_name: str) -> Tuple[str, ...]:
-        pass
+#     @staticmethod
+#     # local/argument/this/that  || temp R5, memo = "A"
+#     def _segment_pointer(
+#         segment: str, address: str, memory_location: str = "M"
+#     ) -> Tuple[str, ...]:
+#         pass
 
-    @staticmethod
-    # local/argument/this/that  || temp R5, memo = "A"
-    def _segment_pointer(
-            segment: str, address: str, memory_location: str = "M"
-    ) -> Tuple[str, ...]:
-        pass
+#     @staticmethod
+#     def _pointer(segment: str) -> Tuple[str, ...]:
+#         pass
 
-    @staticmethod
-    def _pointer(segment: str) -> Tuple[str, ...]:
-        pass
-
-    @staticmethod
-    def _constant(address: str) -> Tuple[str, ...]:
-        pass
+#     @staticmethod
+#     def _constant(address: str) -> Tuple[str, ...]:
+#         pass
 
 
-class StackPush(MemoryCommand):
+class StackPush:
     # *SP=D , *SP++
     __PUSH: Tuple[str, ...] = ("@SP", "A=M", "M=D", "@SP", "M=M+1")
 
@@ -75,7 +74,7 @@ class StackPush(MemoryCommand):
 
     @staticmethod
     def _segment_pointer(
-            segment: str, address: str, memory_location: str = "M"
+        segment: str, address: str, memory_location: str = "M"
     ) -> Tuple[str, ...]:
         return (
             f"//push {segment} {address}",
@@ -87,7 +86,7 @@ class StackPush(MemoryCommand):
         )
 
 
-class StackPop(MemoryCommand):
+class StackPop:
     # *SP-- = *D
     # use R13 to save D, *R13 = D
     # *SP-- , D=*SP , **R13 = D
@@ -133,7 +132,7 @@ class StackPop(MemoryCommand):
 
     @staticmethod
     def _segment_pointer(
-            segment: str, address: str, memory_location: str = "M"
+        segment: str, address: str, memory_location: str = "M"
     ) -> Tuple[str, ...]:
         return (
             f"//pop {segment} {address}",

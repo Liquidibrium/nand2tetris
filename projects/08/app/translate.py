@@ -3,9 +3,9 @@ import os
 from typing import List, TextIO, Tuple
 
 from .arithmetic import arith_dict
-from .memory import *
-from .function import *
-from .branching import *
+from .branching import goto, if_goto, label
+from .function import call, function_command, return_command
+from .memory import StackPop, StackPush
 
 VM_FILE_EXT: str = ".vm"
 ASM_FILE_EXT: str = ".asm"
@@ -53,18 +53,23 @@ def filter_line(line: str) -> str:
 # Bootstrap code
 # SP = 256
 # call Sys.init
-def init_asm_code(file_name):
-    return ("@256", "D=A", "@SP", "M=D",) + call(
-        "Sys.init", 0
-    )  # , f"{file_name}$ret.")
+def init_asm_code(file_name: str) -> Tuple[str, ...]:
+    return (
+        "@256",
+        "D=A",
+        "@SP",
+        "M=D",
+    ) + call("Sys.init", "0")
 
 
-def write_in_file(file, asm_lines):
+def write_in_file(file: TextIO, asm_lines: Tuple[str, ...]) -> None:
     assembled: str = "\n".join(asm_lines) + "\n"
     file.writelines(assembled)
 
 
-def translate_file(file_to_read, file_to_write, vm_file_name_without_ext):
+def translate_file(
+    file_to_read: TextIO, file_to_write: TextIO, vm_file_name_without_ext: str
+) -> None:
     # path_to_vm_file = os.join(path_to_directory, vm_file_name_without_ext + VM_FILE_EXT)
     for line in file_to_read:
         filtered_line: str = filter_line(line)
@@ -92,7 +97,7 @@ def translate(vm_file_or_directory_name: str) -> None:
     else:
         path_to_file_without_ext = vm_file_or_directory_name.split(VM_FILE_EXT)[0]
         _, vm_file_name_without_ext = os.path.split(path_to_file_without_ext)
-        path_to_asm_file: str = path_to_file_without_ext + ASM_FILE_EXT
+        path_to_asm_file = path_to_file_without_ext + ASM_FILE_EXT
         with open(path_to_asm_file, "w") as file_to_write, open(
             vm_file_or_directory_name, "r"
         ) as file_to_read:
