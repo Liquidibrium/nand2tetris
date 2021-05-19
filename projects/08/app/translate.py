@@ -27,15 +27,15 @@ def translate_line(line: str, file_name: str) -> Tuple[str, ...]:
         if words[0] == "call":
             return call(words[1], words[2], f"{file_name}.{words[1]}$")
         if words[0] == "function":
-            return function_command(f"{file_name}.{words[1]}", words[2])
+            return function_command(f"{words[1]}", words[2])
 
     if len(words) == 2:
         if words[0] == "label":
-            return label(words[1])
+            return label(f"{file_name}${words[1]}")
         if words[0] == "if-goto":
-            return if_goto(words[1])
+            return if_goto(f"{file_name}${words[1]}")
         if words[0] == "goto":
-            return goto(words[1])
+            return goto(f"{file_name}${words[1]}")
 
     # if first word is not push or pop then it is arithmetic command
     arith_func = arith_dict[words[0]]
@@ -54,7 +54,9 @@ def filter_line(line: str) -> str:
 # SP = 256
 # call Sys.init
 def init_asm_code(file_name):
-    return ("@256", "D=A", "@SP", "M=D") + call("Sys.init", 0 )#, f"{file_name}$ret.")
+    return ("@256", "D=A", "@SP", "M=D",) + call(
+        "Sys.init", 0
+    )  # , f"{file_name}$ret.")
 
 
 def write_in_file(file, asm_lines):
@@ -62,29 +64,37 @@ def write_in_file(file, asm_lines):
     file.writelines(assembled)
 
 
-def translate_file(path_to_vm_file):
-    path_to_file_without_ext = path_to_vm_file.split(VM_FILE_EXT)[0]
-    _, file_name_without_ext = os.path.split(path_to_file_without_ext)
-
-    path_to_asm_file: str = path_to_file_without_ext + ASM_FILE_EXT
-
-    with open(path_to_vm_file, "r") as file_to_read, open(
-        path_to_asm_file, "w"
-    ) as file_to_write:
-
-        write_in_file(file_to_write, init_asm_code(file_name_without_ext))
-
-        for line in file_to_read:
-            filtered_line: str = filter_line(line)
-            if filtered_line:
-                # each element in result indicates new line in asm file
-                result: Tuple = translate_line(filtered_line, file_name_without_ext)
-                write_in_file(file_to_write, result)
+def translate_file(file_to_read, file_to_write, vm_file_name_without_ext):
+    # path_to_vm_file = os.join(path_to_directory, vm_file_name_without_ext + VM_FILE_EXT)
+    for line in file_to_read:
+        filtered_line: str = filter_line(line)
+        if filtered_line:
+            # each element in result indicates new line in asm file
+            result: Tuple = translate_line(filtered_line, vm_file_name_without_ext)
+            write_in_file(file_to_write, result)
 
 
 def translate(vm_file_or_directory_name: str) -> None:
     if os.path.isdir(vm_file_or_directory_name):
         directory_name = os.path.basename(os.path.dirname(vm_file_or_directory_name))
-        # find main.vm
+        path_to_asm_file = os.path.join(
+            vm_file_or_directory_name, directory_name + ASM_FILE_EXT
+        )
+        with open(path_to_asm_file, "w") as file_to_write:
+            write_in_file(file_to_write, init_asm_code(directory_name))
+            for file_name in os.listdir(vm_file_or_directory_name):
+                if file_name.endswith(VM_FILE_EXT):
+                    path_to_vm_file = os.path.join(vm_file_or_directory_name, file_name)
+                    with open(path_to_vm_file, "r") as file_to_read:
+                        translate_file(
+                            file_to_read, file_to_write, file_name.split(VM_FILE_EXT)[0]
+                        )
     else:
-        translate_file(vm_file_or_directory_name)
+        path_to_file_without_ext = vm_file_or_directory_name.split(VM_FILE_EXT)[0]
+        _, vm_file_name_without_ext = os.path.split(path_to_file_without_ext)
+        path_to_asm_file: str = path_to_file_without_ext + ASM_FILE_EXT
+        with open(path_to_asm_file, "w") as file_to_write, open(
+            vm_file_or_directory_name, "r"
+        ) as file_to_read:
+            write_in_file(file_to_write, init_asm_code(vm_file_name_without_ext))
+            translate_file(file_to_read, file_to_write, vm_file_name_without_ext)

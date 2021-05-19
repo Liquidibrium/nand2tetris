@@ -2,61 +2,6 @@
 D=A
 @SP
 M=D
-//call
-@Sys.init$ret.1
-D=A
-@SP
-A=M
-M=D
-@SP
-M=M+1
-//save LCL
-@LCL
-D=M
-@SP
-A=M
-M=D
-@SP
-M=M+1
-//save ARG
-@ARG
-D=M
-@SP
-A=M
-M=D
-@SP
-M=M+1
-//save THIS
-@THIS
-D=M
-@SP
-A=M
-M=D
-@SP
-M=M+1
-//save THAT
-@THAT
-D=M
-@SP
-A=M
-M=D
-@SP
-M=M+1
-@SP
-D=M
-@LCL
-M=D
-@5
-D=D-A
-@ARG
-M=D
-@SP
-D=M
-@LCL
-M=D
-@Sys.init
-0;JMP
-(Sys.init$ret.1)
 //push ARG 1
 @1
 D=A
@@ -160,7 +105,7 @@ D=M
 A=M
 M=D
 //label
-(FibonacciSeries$MAIN_LOOP_START)
+(MAIN_LOOP_START)
 //push ARG 0
 @0
 D=A
@@ -176,13 +121,13 @@ M=M+1
 @SP
 AM=M-1
 D=M
-@FibonacciSeries$COMPUTE_ELEMENT
+@COMPUTE_ELEMENT
 D;JNE
 //goto 
-@FibonacciSeries$END_PROGRAM
+@END_PROGRAM
 0;JMP
 //label
-(FibonacciSeries$COMPUTE_ELEMENT)
+(COMPUTE_ELEMENT)
 //push THAT 0
 @0
 D=A
@@ -296,7 +241,7 @@ D=M
 A=M
 M=D
 //goto 
-@FibonacciSeries$MAIN_LOOP_START
+@MAIN_LOOP_START
 0;JMP
 //label
-(FibonacciSeries$END_PROGRAM)
+(END_PROGRAM)

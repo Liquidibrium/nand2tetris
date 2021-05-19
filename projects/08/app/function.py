@@ -14,19 +14,19 @@ def pop_arg():
         "D=M",
         "@SP",
         "D=D+A",
-        "@R13",
+        "@R15",
         "M=D",
         "@SP",
         "AM=M-1",
         "D=M",
-        "@R13",
+        "@R15",
         "A=M",
         "M=D",
     )
 
 
 def return_memory_segment(segment):
-    return ("@R11", "D=M-1", "AM=D", "D=M", f"@{segment }", "M=D")
+    return ("@R13", "D=M-1", "AM=D", "D=M", f"@{segment }", "M=D")
 
 
 def return_command():
@@ -34,12 +34,12 @@ def return_command():
     tmp1 = (
         "@LCL",
         "D=M",
-        "@R11",
+        "@R13",
         "M=D",
         "@5",
         "A=D-A",
         "D=M",
-        "@R12",
+        "@R14",
         "M=D",
     )
     tmp2 = (
@@ -52,7 +52,7 @@ def return_command():
     this = return_memory_segment("THIS")
     arg = return_memory_segment("ARG")
     lcl = return_memory_segment("LCL")
-    tmp3 = ("@R12", "A=M", "0;JMP")
+    tmp3 = ("@R14", "A=M", "0;JMP")
     return tmp1 + p_arg + tmp2 + that + this + arg + lcl + tmp3
 
 
@@ -82,9 +82,12 @@ def call(function_name, num_arguments, lable_pre=None):
     post = (
         "@SP",
         "D=M",
-        "@5",
-        "D=D-A",
-        f"@{num_arguments}",
+        "@LCL",
+        "M=D",
+        f"@{int(num_arguments)+5}",
+        # "@5",
+        # "D=D-A",
+        # f"@{num_arguments}",
         "D=D-A",
         "@ARG",
         "M=D",
