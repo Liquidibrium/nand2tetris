@@ -3,7 +3,7 @@ count_call = 0
 
 def function_command(function_name_lable, num_variables):
     result = (f"({function_name_lable})",)
-    for _ in range(num_variables):
+    for _ in range(int(num_variables)):
         result += ("@SP", "D=A", "@SP", "A=M", "M=D", "@SP", "M=M+1")
     return result
 
