@@ -1,11 +1,11 @@
 echo 1
-python vm_translator.py --target ./ProgramFlow/BasicLoop/BasicLoop.vm
+python vm_translator.py --target ./ProgramFlow/BasicLoop/
 ../../tools/CPUEmulator.sh ./ProgramFlow/BasicLoop/BasicLoop.tst
 echo 2
-python vm_translator.py --target ./ProgramFlow/FibonacciSeries/FibonacciSeries.vm
+python vm_translator.py --target ./ProgramFlow/FibonacciSeries/
 ../../tools/CPUEmulator.sh ./ProgramFlow/FibonacciSeries/FibonacciSeries.tst 
 echo 3
-python vm_translator.py --target FunctionCalls/SimpleFunction/SimpleFunction.vm
+python vm_translator.py --target FunctionCalls/SimpleFunction/
 ../../tools/CPUEmulator.sh FunctionCalls/SimpleFunction/SimpleFunction.tst
 echo 4
 python vm_translator.py --target FunctionCalls/NestedCall/

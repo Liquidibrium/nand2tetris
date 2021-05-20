@@ -1,33 +1,5 @@
 from typing import Tuple
 
-# class MemoryCommand:
-#     @staticmethod
-#     def to_asm_code(segment: str, address: str) -> Tuple[str, ...]:
-#         pass
-
-#     @staticmethod
-#     def _filter_segment(segment: str, address: str) -> Tuple[str, ...]:
-#         pass
-
-#     @staticmethod
-#     def _static(address: str, file_name: str) -> Tuple[str, ...]:
-#         pass
-
-#     @staticmethod
-#     # local/argument/this/that  || temp R5, memo = "A"
-#     def _segment_pointer(
-#         segment: str, address: str, memory_location: str = "M"
-#     ) -> Tuple[str, ...]:
-#         pass
-
-#     @staticmethod
-#     def _pointer(segment: str) -> Tuple[str, ...]:
-#         pass
-
-#     @staticmethod
-#     def _constant(address: str) -> Tuple[str, ...]:
-#         pass
-
 
 class StackPush:
     # *SP=D , *SP++

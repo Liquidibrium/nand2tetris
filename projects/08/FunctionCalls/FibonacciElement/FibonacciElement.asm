@@ -44,8 +44,6 @@ M=D
 M=M+1
 @SP
 D=M
-@LCL
-M=D
 @5
 D=D-A
 @ARG
@@ -108,8 +106,6 @@ M=D
 M=M+1
 @SP
 D=M
-@LCL
-M=D
 @6
 D=D-A
 @ARG
@@ -307,8 +303,6 @@ M=D
 M=M+1
 @SP
 D=M
-@LCL
-M=D
 @6
 D=D-A
 @ARG
@@ -387,8 +381,6 @@ M=D
 M=M+1
 @SP
 D=M
-@LCL
-M=D
 @6
 D=D-A
 @ARG

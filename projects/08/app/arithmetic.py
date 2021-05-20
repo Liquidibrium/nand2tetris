@@ -53,50 +53,14 @@ def __one_arg_func_to_asm(func: str) -> Tuple[str, ...]:
     )
 
 
-def stack_eq() -> Tuple[str, ...]:
-    return __jump("EQ")
-
-
-def stack_lt() -> Tuple[str, ...]:
-    return __jump("LT")
-
-
-def stack_gt() -> Tuple[str, ...]:
-    return __jump("GT")
-
-
-def stack_neg() -> Tuple[str, ...]:
-    return ("//neg",) + __one_arg_func_to_asm("-")
-
-
-def stack_not() -> Tuple[str, ...]:
-    return ("//not",) + __one_arg_func_to_asm("!")
-
-
-def stack_or() -> Tuple[str, ...]:
-    return ("//or",) + __two_arg_func_to_asm("|")
-
-
-def stack_and() -> Tuple[str, ...]:
-    return ("//and",) + __two_arg_func_to_asm("&")
-
-
-def stack_sub() -> Tuple[str, ...]:
-    return ("//sub",) + __two_arg_func_to_asm("-")
-
-
-def stack_add() -> Tuple[str, ...]:
-    return ("//add ",) + __two_arg_func_to_asm("+")
-
-
 arith_dict: Dict[str, Union[Callable[[], tuple]]] = {
-    "add": stack_add,
-    "sub": stack_sub,
-    "and": stack_and,
-    "or": stack_or,
-    "not": stack_not,
-    "neg": stack_neg,
-    "gt": stack_gt,
-    "lt": stack_lt,
-    "eq": stack_eq,
+    "add": lambda: ("//add ",) + __two_arg_func_to_asm("+"),
+    "sub": lambda: ("//sub",) + __two_arg_func_to_asm("-"),
+    "and": lambda: ("//and",) + __two_arg_func_to_asm("&"),
+    "not": lambda: ("//not",) + __one_arg_func_to_asm("!"),
+    "neg": lambda: ("//neg",) + __one_arg_func_to_asm("-"),
+    "or": lambda: ("//or",) + __two_arg_func_to_asm("|"),
+    "gt": lambda: __jump("GT"),
+    "lt": lambda: __jump("LT"),
+    "eq": lambda: __jump("EQ"),
 }
