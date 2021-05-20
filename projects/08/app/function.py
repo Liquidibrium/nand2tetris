@@ -15,7 +15,7 @@ def function_command(function_name_label: str, num_variables: str) -> Tuple[str,
 
 # restore memory segment from temp R13 , endFrame--
 def _return_memory_segment(segment: str) -> Tuple:
-    return ("@R13", "D=M-1", "AM=D", "D=M", f"@{segment }", "M=D")
+    return ("@R13", "D=M-1", "AM=D", "D=M", f"@{segment}", "M=D")
 
 
 def return_command() -> Tuple:
@@ -81,7 +81,7 @@ def call_command(function_name: str, num_arguments: str) -> Tuple[str, ...]:
         # reposition ARG
         "@SP",
         "D=M",
-        f"@{int(num_arguments)+5}",  # calculate return address
+        f"@{int(num_arguments) + 5}",  # calculate return address
         "D=D-A",
         "@ARG",
         "M=D",
@@ -91,10 +91,10 @@ def call_command(function_name: str, num_arguments: str) -> Tuple[str, ...]:
         "@LCL",
         "M=D",
         # goto function
-        f"@{function_name }",
+        f"@{function_name}",
         "0;JMP",
         # return address label
-        f"({return_label })",
+        f"({return_label})",
     )
     return save_return_address + save_lcl + save_arg + save_this + save_that + end_call
 
@@ -102,7 +102,7 @@ def call_command(function_name: str, num_arguments: str) -> Tuple[str, ...]:
 # Bootstrap code
 # SP = 256
 # call Sys.init
-def init_asm_code(file_name: str) -> Tuple[str, ...]:
+def init_asm_code() -> Tuple[str, ...]:
     return (
         "@256",
         "D=A",

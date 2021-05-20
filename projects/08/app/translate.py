@@ -12,6 +12,7 @@ VM_FILE_EXT: str = ".vm"
 ASM_FILE_EXT: str = ".asm"
 INIT_FILE_NAME: str = "Sys.vm"
 
+
 # file name without path and extension
 
 
@@ -87,7 +88,7 @@ def translate(vm_file_or_directory_name: str) -> None:
 
     with open(path_to_asm_file, "w") as file_to_write:
         if need_bootstrap:
-            write_in_file(file_to_write, init_asm_code(directory_name))
+            write_in_file(file_to_write, init_asm_code())
         for path_to_vm_file in path_to_vm_files:
             with open(path_to_vm_file, "r") as file_to_read:
                 # get .vm file name without extension and path
