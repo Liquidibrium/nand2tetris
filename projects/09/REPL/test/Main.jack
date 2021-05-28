@@ -1,0 +1,29 @@
+class Main{
+
+    function void main() {
+        var Stack st;
+        let st = Stack.new(5);
+        do st.add("1");
+        do st.add("2");
+        do Output.printString(st.pop());
+        do Output.println();
+        do Output.printString(st.pop());
+        do Output.println();
+        do st.add("1");
+        do st.add("2");
+        do st.add("3");
+        do st.add("4");
+        do st.add("5");
+        do st.add("6");
+        do Output.printString(st.getItemAt(0));
+        do Output.println();
+        do Output.printString(st.getItemAt(1));
+        do Output.println();
+        do Output.printString(st.getItemAt(2));
+        do Output.println();
+        do Output.printString(st.getItemAt(3));
+        do Output.println();
+        return;
+    }
+
+}

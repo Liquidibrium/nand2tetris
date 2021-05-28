@@ -1,0 +1,73 @@
+class Stack{
+    field Array items;
+    field int allocatedLen;
+    field int logicLen;
+
+    constructor Stack new(int intialLength) {
+        let items = Array.new(intialLength);
+        let allocatedLen = intialLength;
+        let logicLen = 0;
+        return this;
+    } 
+
+    method void resize(int size){
+        //TODO 
+        return ;
+    }
+
+    method boolean push(String value) {
+        if(logicLen = allocatedLen) {
+            return false;
+        }
+        let items[logicLen] = value;
+        let logicLen = logicLen + 1;
+        return true;
+    }
+
+    method String pop() {
+        if (logicLen = 0) {
+            return "Null";
+        }
+        let logicLen = logicLen - 1;
+        return items[logicLen];
+    }
+
+    method String getItemAt(int index){
+        if (logicLen = 0){
+            return "Null";
+        }
+        // TODO: if index >= alloclen 
+        return items[index];
+    }
+
+    method boolean isEmpty(){
+        return logicLen = 0;
+    }
+
+    method int size(){
+        return logicLen;
+    }
+
+    method void dispose(){
+        // for each .dispose () 
+        do Array.dispose();
+        do Memory.deAlloc(this);  
+        return;
+    }
+    
+    method String last(){
+        return items[logicLen-1];
+    }
+
+    method String toString(){
+        var String str;
+        var int index ;
+        let index = 0;
+        let str = String.new(2*logicLen);
+        while(index < logicLen){
+            // todo
+           let  index = index + 1;
+        }
+        return str;
+    }
+}

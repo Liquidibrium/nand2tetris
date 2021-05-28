@@ -1,0 +1,111 @@
+class StringFunctions{
+
+    function boolean stringEquals(String first, String second) {
+        var int len;
+        var int i ;
+        let len = first.length();
+        if (~(second.length() = len)){
+            return false;
+        } 
+        let i = 0;
+        while (i < len){
+            if(~(first.charAt(i)=second.charAt(i))) {
+                return false;
+            }
+            let i = i + 1;
+        }
+        return true;
+   }
+    
+    function String charToString(char ch) {
+        var String res;
+        let res = String.new(1);
+        do res.appendChar(ch);
+        return res;
+    }
+    
+    function void stringAppend(String first, String second) {
+        var int len;
+        var int i ;
+        let len = second.length();
+        let i = 0;
+        while (i < len) {
+            do first.appendChar(second.charAt(i));
+            let i = i + 1;
+        }
+        return ;
+   }
+
+
+
+    function boolean isDigit(char ch) {
+        if((ch > 47) & (ch < 58 )){
+            return true;
+        }
+        return false;
+    }
+
+    function boolean isOpeningBracket(char ch) {
+        if(ch = 40 ){
+            return true;
+        }
+        return false;
+    }
+
+    function boolean isClosingBracket(char ch) {
+        if(ch = 41 ){
+            return true;
+        }
+        return false;
+    }
+
+    function boolean isMult(char ch){ // *
+        if(ch = 42) { // *
+            return true;
+        } 
+        return false;
+    }
+
+    function boolean isAdd(char ch){ // +
+        if(ch = 43) { // +
+            return true;
+        }
+        return false;
+    }
+
+    function boolean isSub(char ch){ // - 
+        if(ch = 45) { // -  
+            return true;
+        }
+        return false;
+    }
+
+    function boolean isDiv(char ch){ // / 
+        return ch = 47;
+    }
+
+    function boolean isOperator(char ch) {
+        if(ch = 42) { // *
+            return true;
+        } 
+        if(ch = 43) { // +
+            return true;
+        }
+        if(ch = 45) { // -  
+            return true;
+        }
+        if(ch = 47) { // / 
+            return true;
+        }
+        return false;
+    }
+
+    function boolean isSpace(char ch){
+        if (ch = 32){
+            return true;
+        }
+        return false;
+    }
+    
+
+}
