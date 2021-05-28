@@ -1,0 +1,15 @@
+class Parser{
+
+    constructor Parser new(){
+        return this;
+    }
+    function String evaluate(string expression){
+        return " empty ";
+    }
+    /** Disposes this fraction. */
+    method void dispose() {
+      do Memory.deAlloc(this);  // uses an OS routine to recycle the memory held by the object
+      return;
+   }
+   
+}
