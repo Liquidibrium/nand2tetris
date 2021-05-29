@@ -169,7 +169,7 @@ class Parser {
                     //     do  Parser.log("size 1");
                     // }
 
-                    do  Parser.log("asd1");
+                    // do  Parser.log("asd1");
                     return "Invalid expression!";
                 }
                 let second = st.pop();
@@ -194,7 +194,7 @@ class Parser {
             let postfixIndex = postfixIndex + 1; 
         }
         if (~(st.size() = 1)) {
-            do  Parser.log("asd2");
+            // do  Parser.log("asd2");
              return "Invalid expression!";
         }
         do res.setInt(st.pop());
@@ -214,9 +214,8 @@ class Parser {
         return result;
     }
 
-    /** Disposes this fraction. */
     method void dispose() {
-        do Memory.deAlloc(this);  // uses an OS routine to recycle the memory held by the object
+        do Memory.deAlloc(this);  
         return;
    }
    
