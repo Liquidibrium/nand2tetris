@@ -695,18 +695,6 @@ lt
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
-push constant 4
-call String.new 1
-push constant 97
-call String.appendChar 2
-push constant 115
-call String.appendChar 2
-push constant 100
-call String.appendChar 2
-push constant 49
-call String.appendChar 2
-call Parser.log 1
-pop temp 0
 push constant 19
 call String.new 1
 push constant 73
@@ -837,18 +825,6 @@ not
 if-goto IF_TRUE6
 goto IF_FALSE6
 label IF_TRUE6
-push constant 4
-call String.new 1
-push constant 97
-call String.appendChar 2
-push constant 115
-call String.appendChar 2
-push constant 100
-call String.appendChar 2
-push constant 50
-call String.appendChar 2
-call Parser.log 1
-pop temp 0
 push constant 19
 call String.new 1
 push constant 73

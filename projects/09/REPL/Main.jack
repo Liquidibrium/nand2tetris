@@ -1,25 +1,28 @@
-/** Hello World program. */
+
 class Main {
    
    function void main() {
+      var String starting;
       var String inputted_expression;
       var String clear;
       var String result;
       let clear = "CLEAR";
-      let inputted_expression = Keyboard.readLine(">>> ");
-      while (~StringFunctions.stringEquals(inputted_expression,clear)) {
-         // if (Main.stringEquals(inputted_expression,clear)){
-         //    Screen.clear();
-         //    Output.moveCursor(0,0);
-         // }
-         let result = Parser.evaluate(inputted_expression);
-         do Output.printString(result);
-         do Output.println();
-         let inputted_expression = Keyboard.readLine(">>> ");
+      let starting = ">>> ";
+      while (true) {  // (~StringFunctions.stringEquals(inputted_expression,clear)) {
+         let inputted_expression = Keyboard.readLine(starting);
+         if (StringFunctions.stringEquals(inputted_expression,clear)){
+            do Screen.clearScreen();
+            do Output.moveCursor(0,0);
+         }else {
+            let result = Parser.evaluate(inputted_expression);
+            do Output.printString(result);
+            do Output.println();
+         }
+         // let inputted_expression = Keyboard.readLine(starting);
       } 
-      do Output.printString(inputted_expression);
-      // do clear.dispose();
-      // do inputted_expression.dispose();
+      // do Output.printString(inputted_expression);
+      do clear.dispose();
+      do inputted_expression.dispose();
       return;
    }
 }
