@@ -1,6 +1,6 @@
-class Parser{
+class Parser {
 
-    constructor Parser new(){
+    constructor Parser new() {
         return this;
     }
 
@@ -10,9 +10,17 @@ class Parser{
         return;
     }
 
-  
+    function int precendence(char operator) {
+        if (StringFunctions.isAdd(operator) | StringFunctions.isSub(operator)) {
+            return 1;
+        }
+        if (StringFunctions.isMult(operator) | StringFunctions.isDiv(operator)) {
+            return 2;
+        }
+        return 0;
+    }
     
-    function bool isValidChar(char currentChar){
+    function bool isValidChar(char currentChar) {
         if (StringFunctions.isDigit(currentChar)) {
             return true;
         }
@@ -45,27 +53,28 @@ class Parser{
         let stack = Stack.new(infixLength);
         let postfix = Stack.new(infixLength);
         let previousWasOperator = false;
-       
 
         while(infixIndex < infixLength) {
             let currentChar = infix.charAt(infixIndex);
             if(Parser.isValidChar(currentChar)){
-                if (StringFunctions.isDigit(currentChar)) {  // 3 + 4  
+                if (StringFunctions.isDigit(currentChar)) { 
                     if ((postfix.size() > 0) & (~previousWasOperator)) {
                         // do  Parser.log("1");
                         do postfix.push("Invalid expression!");
                         return postfix;
                     }
                     let lastNumber = String.new(infixLength);
-                    do lastNumber.appendChar(currentChar);
-                    let infixIndex = infixIndex + 1; 
-                    if (infixIndex < infixLength) {
-                        let currentChar = infix.charAt(infixIndex);
-                    
-                        while (infixIndex < infixLength & StringFunctions.isDigit(currentChar)) {
-                            let currentChar = infix.charAt(infixIndex);
-                            do lastNumber.appendChar(currentChar);
+                    do lastNumber.appendChar(currentChar); 
+                    let infixIndex = infixIndex + 1;   
+                    if (infixIndex < infixLength) { 
+                        let currentChar = infix.charAt(infixIndex); 
+                        while ((infixIndex < (infixLength -1)) & StringFunctions.isDigit(currentChar)) {
+                            do lastNumber.appendChar(currentChar); 
                             let infixIndex = infixIndex + 1; 
+                            let currentChar = infix.charAt(infixIndex); 
+                        }
+                        if (StringFunctions.isDigit(currentChar)){
+                            do lastNumber.appendChar(currentChar);
                         }
                         if (~Parser.isValidChar(currentChar)) {
                             do postfix.push("Invalid expression!");
@@ -75,7 +84,6 @@ class Parser{
 
                     do postfix.push(lastNumber);
                     let previousWasOperator = false;
-                    // lastNumber.dispose();
                 }
                 if (StringFunctions.isOpeningBracket(currentChar)) {
                     do stack.push(currentChar);
@@ -88,7 +96,7 @@ class Parser{
                     }
                     let lastCharFromStack = stack.pop();
                     while(~ StringFunctions.isOpeningBracket(lastCharFromStack )) {
-                        do postfix.push(lastCharFromStack);
+                        do postfix.push(StringFunctions.charToString(lastCharFromStack));
                         if(stack.isEmpty()){
                             // do  Parser.log("3");
                             do postfix.push("Invalid expression!");
@@ -106,7 +114,10 @@ class Parser{
                             return postfix;
                         } 
                     }
-                    do stack.push(StringFunctions.charToString(currentChar));
+                    while(~stack.isEmpty() & (~(Parser.precendence(currentChar) > Parser.precendence(stack.last())))){
+                        do postfix.push(StringFunctions.charToString(stack.pop()));     
+                    }
+                    do stack.push(currentChar);
                     let previousWasOperator = true;
                 }
                 if (StringFunctions.isSpace(currentChar)) { 
@@ -141,20 +152,28 @@ class Parser{
         var int first;
         var int second;
         let postfixSize = postfix.size();
-        let res = String.new(postfixSize);
+        let res = String.new(postfixSize); // there is no power ^ operator 
         let postfixIndex = 0;
         let st = Stack.new(postfixSize);
 
 
         while(postfixIndex < postfixSize) {
-          
-            let currentStr = st.pop();
-            if (StringFunctions.isOperator( currentStr.charAt(0))){
-                if (st.size()<2){
+            let currentStr = postfix.getItemAt(postfixIndex);
+            // do Parser.log(currentStr);
+            if (StringFunctions.isOperator( currentStr.charAt(0))) {
+                if (st.size() < 2){
+                    // if(st.size() = 0){
+                    //     do  Parser.log("size 0");
+                    // }
+                    // if(st.size() = 1){
+                    //     do  Parser.log("size 1");
+                    // }
+
+                    do  Parser.log("asd1");
                     return "Invalid expression!";
                 }
-                let second = postfix.pop();
-                let first = postfix.pop();
+                let second = st.pop();
+                let first = st.pop();
                 if(currentStr.charAt(0) = 42) { // *
                   do  st.push(first*second);
                 } 
@@ -167,12 +186,15 @@ class Parser{
                 if(currentStr.charAt(0) = 47) { // / 
                    do st.push(first/second);
                 }
+
             } else{
+               
                do st.push(currentStr.intValue());
             }
             let postfixIndex = postfixIndex + 1; 
         }
         if (~(st.size() = 1)) {
+            do  Parser.log("asd2");
              return "Invalid expression!";
         }
         do res.setInt(st.pop());
@@ -184,8 +206,9 @@ class Parser{
         var String result;
         var String last ;
         let postfix = Parser.infixToPostfix(expression); // TODO  
+        // do Parser.log(postfix.last());
         if (StringFunctions.stringEquals(postfix.last(), "Invalid expression!")) { // change 
-                return postfix.last();
+                return postfix.pop();
             }
         let result = Parser.evaluatePostfix(postfix);
         return result;
