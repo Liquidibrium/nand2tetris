@@ -1,4 +1,4 @@
-function Main.main 4
+function Main.main 6
 push constant 5
 call String.new 1
 push constant 67
@@ -23,6 +23,9 @@ call String.appendChar 2
 push constant 32
 call String.appendChar 2
 pop local 0
+push constant 11
+call LRU_Array.new 1
+pop local 4
 label WHILE_EXP0
 push constant 0
 not
@@ -32,31 +35,81 @@ push local 0
 call Keyboard.readLine 1
 pop local 1
 push local 1
-push local 2
-call StringFunctions.stringEquals 2
+call String.length 1
+push constant 0
+eq
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
+push local 2
+call String.dispose 1
+pop temp 0
+push local 0
+call String.dispose 1
+pop temp 0
+push local 1
+call String.dispose 1
+pop temp 0
+push constant 0
+return
+label IF_FALSE0
+push local 1
+push local 2
+call StringFunctions.stringEquals 2
+push local 1
+call String.length 1
+push constant 60
+gt
+or
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
 call Screen.clearScreen 0
 pop temp 0
 push constant 0
 push constant 0
 call Output.moveCursor 2
 pop temp 0
-goto IF_END0
-label IF_FALSE0
+push local 4
+call LRU_Array.clear 1
+pop temp 0
+goto IF_END1
+label IF_FALSE1
 push local 1
 call Parser.evaluate 1
 pop local 3
+push local 0
+push local 1
+push constant 0
+not
+call StringFunctions.stringConcat 3
+pop local 5
+push local 4
+push local 5
 push local 3
-call Output.printString 1
+push constant 0
+call StringFunctions.stringConcat 3
+call LRU_Array.add 2
 pop temp 0
-call Output.println 0
+push local 5
+call String.dispose 1
 pop temp 0
-label IF_END0
+call Screen.clearScreen 0
+pop temp 0
+push constant 0
+push constant 0
+call Output.moveCursor 2
+pop temp 0
+push local 4
+call LRU_Array.print 1
+pop temp 0
+label IF_END1
 goto WHILE_EXP0
 label WHILE_END0
 push local 2
+call String.dispose 1
+pop temp 0
+push local 0
 call String.dispose 1
 pop temp 0
 push local 1

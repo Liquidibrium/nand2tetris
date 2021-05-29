@@ -6,22 +6,40 @@ class Main {
       var String inputted_expression;
       var String clear;
       var String result;
+      var LRU_Array screenStrings;
+      var String tmp;
       let clear = "CLEAR";
       let starting = ">>> ";
-      while (true) {  // (~StringFunctions.stringEquals(inputted_expression,clear)) {
+
+      // 23 lines, screen size 
+      let screenStrings = LRU_Array.new(11);
+      while (true) { 
          let inputted_expression = Keyboard.readLine(starting);
-         if (StringFunctions.stringEquals(inputted_expression,clear)){
+         if(inputted_expression.length() = 0) { // empty input
+            do clear.dispose();
+            do starting.dispose();
+            do inputted_expression.dispose();
+            return;
+         }
+         // do screenStrings.add();
+         // check if  input string is "CLEAR" or is out of horizontal bounds
+         if (StringFunctions.stringEquals(inputted_expression,clear) | (inputted_expression.length()>60)){
             do Screen.clearScreen();
             do Output.moveCursor(0,0);
+            do screenStrings.clear();
          }else {
             let result = Parser.evaluate(inputted_expression);
-            do Output.printString(result);
-            do Output.println();
+            let tmp = StringFunctions.stringConcat(starting,inputted_expression, true);
+            do screenStrings.add(StringFunctions.stringConcat(tmp, result, false));
+            do tmp.dispose();
+            do Screen.clearScreen();
+            do Output.moveCursor(0,0);
+            do screenStrings.print();
          }
-         // let inputted_expression = Keyboard.readLine(starting);
       } 
-      // do Output.printString(inputted_expression);
+      // unreachable 
       do clear.dispose();
+      do starting.dispose();
       do inputted_expression.dispose();
       return;
    }

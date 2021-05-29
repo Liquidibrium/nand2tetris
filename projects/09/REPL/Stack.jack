@@ -1,12 +1,13 @@
 class Stack{
-    field Array items;
+    field Array elements;
     field int allocatedLen;
     field int logicLen;
-
-    constructor Stack new(int intialLength) {
-        let items = Array.new(intialLength);
+    field boolean doesElementNeedDisposeToBeCalled;
+    constructor Stack new(int intialLength,boolean isElementsPointers) {
+        let elements = Array.new(intialLength);
         let allocatedLen = intialLength;
         let logicLen = 0;
+        let doesElementNeedDisposeToBeCalled = isElementsPointers;
         return this;
     } 
 
@@ -19,7 +20,7 @@ class Stack{
         if(logicLen = allocatedLen) {
             return false;
         }
-        let items[logicLen] = value;
+        let elements[logicLen] = value;
         let logicLen = logicLen + 1;
         return true;
     }
@@ -29,7 +30,7 @@ class Stack{
             return "Null";
         }
         let logicLen = logicLen - 1;
-        return items[logicLen];
+        return elements[logicLen];
     }
 
     method String getItemAt(int index){
@@ -37,7 +38,7 @@ class Stack{
             return "Null";
         }
         // TODO: if index >= alloclen 
-        return items[index];
+        return elements[index];
     }
 
     method boolean isEmpty(){
@@ -49,25 +50,24 @@ class Stack{
     }
 
     method void dispose(){
+        var int index;
+        var String temp;
+        let index = 0;
+        if(doesElementNeedDisposeToBeCalled){
+            while(index < logicLen){
+                let temp = elements[index];
+                do temp.dispose();
+                let index = index + 1;
+            }
+        }
         // for each .dispose () 
-        do Array.dispose();
+        do elements.dispose();
         do Memory.deAlloc(this);  
         return;
     }
     
     method String last(){
-        return items[logicLen-1];
+        return elements[logicLen-1];
     }
 
-    method String toString(){
-        var String str;
-        var int index ;
-        let index = 0;
-        let str = String.new(2*logicLen);
-        while(index < logicLen){
-            // todo
-           let  index = index + 1;
-        }
-        return str;
-    }
 }

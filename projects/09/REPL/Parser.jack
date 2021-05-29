@@ -40,8 +40,8 @@ class Parser {
     }
 
     function Stack infixToPostfix(String infix) {
-        var Stack stack; // operators and ( 
-        var Stack postfix; // converted postfix expression
+        var Stack stack; // operators and ( // saves characters 
+        var Stack postfix; // converted postfix expression, saves strings
         var int infixLength; // infix expression length 
         var int infixIndex ; // index in infix expression 
         var boolean previousWasOperator;
@@ -50,16 +50,21 @@ class Parser {
         var String lastNumber;
         let infixIndex = 0; 
         let infixLength = infix.length();
-        let stack = Stack.new(infixLength);
-        let postfix = Stack.new(infixLength);
+        if (infixLength = 0){ 
+            let postfix = Stack.new(1, true);
+            do postfix.push("Invalid expression!");
+            return postfix;
+        }
+        let postfix = Stack.new(infixLength, true);
+        let stack = Stack.new(infixLength, false);
         let previousWasOperator = false;
 
         while(infixIndex < infixLength) {
             let currentChar = infix.charAt(infixIndex);
             if(Parser.isValidChar(currentChar)){
-                if (StringFunctions.isDigit(currentChar)) { 
+                if (StringFunctions.isDigit(currentChar)) { // this just works 
                     if ((postfix.size() > 0) & (~previousWasOperator)) {
-                        // do  Parser.log("1");
+                        do stack.dispose();
                         do postfix.push("Invalid expression!");
                         return postfix;
                     }
@@ -77,6 +82,7 @@ class Parser {
                             do lastNumber.appendChar(currentChar);
                         }
                         if (~Parser.isValidChar(currentChar)) {
+                            do stack.dispose();
                             do postfix.push("Invalid expression!");
                             return postfix;
                         }
@@ -90,15 +96,15 @@ class Parser {
                 }
                 if (StringFunctions.isClosingBracket(currentChar)) {
                     if(stack.isEmpty() | previousWasOperator) {
-                        // do  Parser.log("2");
+                        do stack.dispose();
                         do postfix.push("Invalid expression!");
                         return postfix;
                     }
                     let lastCharFromStack = stack.pop();
-                    while(~ StringFunctions.isOpeningBracket(lastCharFromStack )) {
+                    while(~ StringFunctions.isOpeningBracket(lastCharFromStack)) {
                         do postfix.push(StringFunctions.charToString(lastCharFromStack));
                         if(stack.isEmpty()){
-                            // do  Parser.log("3");
+                            do stack.dispose();
                             do postfix.push("Invalid expression!");
                             return postfix;
                         }       
@@ -107,14 +113,15 @@ class Parser {
 
                 }
                 if (StringFunctions.isOperator(currentChar)) {
-                    if (postfix.size() = 0) { //  (-2 + 3) is valid 
-                        if(~((currentChar = 45) | (currentChar = 47) )) {// - or +   
-                            // do  Parser.log("4");
-                            do postfix.push("Invalid expression!");
-                            return postfix;
-                        } 
+                    if (postfix.size() = 0) { 
+                        // if(~((currentChar = 45) | (currentChar = 47) )) {// - or +   
+                        do stack.dispose();
+                        do postfix.push("Invalid expression!");
+                        return postfix;
+                        // } 
                     }
-                    while(~stack.isEmpty() & (~(Parser.precendence(currentChar) > Parser.precendence(stack.last())))){
+                    while(~stack.isEmpty() &
+                         (~(Parser.precendence(currentChar) > Parser.precendence(stack.last())))){
                         do postfix.push(StringFunctions.charToString(stack.pop()));     
                     }
                     do stack.push(currentChar);
@@ -125,7 +132,7 @@ class Parser {
                 }
                 let infixIndex = infixIndex + 1;
             } else {
-                // do  Parser.log("5");
+                do stack.dispose();
                 do postfix.push("Invalid expression!");
                 return postfix;
 
@@ -134,83 +141,75 @@ class Parser {
         while(~stack.isEmpty()) {
             let currentChar =  stack.pop();
             if(StringFunctions.isOpeningBracket(currentChar)) {
-                // do  Parser.log("6");
                 do postfix.push("Invalid expression!");
+                 do stack.dispose();
                 return postfix;
             }
             do postfix.push(StringFunctions.charToString(currentChar));     
         }
+        do stack.dispose();
         return postfix;
     }
 
     function String evaluatePostfix(Stack postfix) {
         var String res;
-        var Stack st;
+        var Stack st; // saves calculated ints 
         var int postfixSize;
         var int postfixIndex;
         var String currentStr;
         var int first;
         var int second;
         let postfixSize = postfix.size();
-        let res = String.new(postfixSize); // there is no power ^ operator 
+        let res = String.new(64); // max line size 
         let postfixIndex = 0;
-        let st = Stack.new(postfixSize);
+        let st = Stack.new(postfixSize, false);
 
 
         while(postfixIndex < postfixSize) {
             let currentStr = postfix.getItemAt(postfixIndex);
-            // do Parser.log(currentStr);
             if (StringFunctions.isOperator( currentStr.charAt(0))) {
-                if (st.size() < 2){
-                    // if(st.size() = 0){
-                    //     do  Parser.log("size 0");
-                    // }
-                    // if(st.size() = 1){
-                    //     do  Parser.log("size 1");
-                    // }
-
-                    // do  Parser.log("asd1");
+                if (st.size() < 2) {
+                     do st.dispose();
                     return "Invalid expression!";
                 }
                 let second = st.pop();
                 let first = st.pop();
-                if(currentStr.charAt(0) = 42) { // *
+                if(StringFunctions.isMult(currentStr.charAt(0))) { // *
                   do  st.push(first*second);
                 } 
-                if(currentStr.charAt(0) = 43) { // +
+                if(StringFunctions.isAdd(currentStr.charAt(0))) { // +
                    do st.push(first+second);
                 }
-                if(currentStr.charAt(0) = 45) { // -  
+                if(StringFunctions.isSub(currentStr.charAt(0))) { // -  
                    do st.push(first-second);
                 }
-                if(currentStr.charAt(0) = 47) { // / 
+                if(StringFunctions.isDiv(currentStr.charAt(0))) { // / 
                    do st.push(first/second);
                 }
-
             } else{
-               
                do st.push(currentStr.intValue());
             }
             let postfixIndex = postfixIndex + 1; 
         }
         if (~(st.size() = 1)) {
-            // do  Parser.log("asd2");
-             return "Invalid expression!";
+            do st.dispose();
+            return "Invalid expression!";
         }
         do res.setInt(st.pop());
+        do st.dispose();
         return  res;
     }
 
     function String evaluate(string expression) {
         var Stack postfix;
         var String result;
-        var String last ;
-        let postfix = Parser.infixToPostfix(expression); // TODO  
-        // do Parser.log(postfix.last());
+        let postfix = Parser.infixToPostfix(expression);
         if (StringFunctions.stringEquals(postfix.last(), "Invalid expression!")) { // change 
+                do postfix.dispose();
                 return postfix.pop();
             }
         let result = Parser.evaluatePostfix(postfix);
+        do postfix.dispose();
         return result;
     }
 

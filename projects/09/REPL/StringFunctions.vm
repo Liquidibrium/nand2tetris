@@ -54,31 +54,70 @@ call String.appendChar 2
 pop temp 0
 push local 0
 return
-function StringFunctions.stringAppend 2
+function StringFunctions.stringConcat 4
+push argument 0
+call String.length 1
+pop local 1
 push argument 1
 call String.length 1
+pop local 2
+push local 1
+push local 2
+add
+push constant 1
+add
+call String.new 1
 pop local 0
 push constant 0
-pop local 1
+pop local 3
 label WHILE_EXP0
+push local 3
 push local 1
-push local 0
 lt
 not
 if-goto WHILE_END0
+push local 0
 push argument 0
-push argument 1
-push local 1
+push local 3
 call String.charAt 2
 call String.appendChar 2
 pop temp 0
-push local 1
+push local 3
 push constant 1
 add
-pop local 1
+pop local 3
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0
+pop local 3
+label WHILE_EXP1
+push local 3
+push local 2
+lt
+not
+if-goto WHILE_END1
+push local 0
+push argument 1
+push local 3
+call String.charAt 2
+call String.appendChar 2
+pop temp 0
+push local 3
+push constant 1
+add
+pop local 3
+goto WHILE_EXP1
+label WHILE_END1
+push argument 2
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 0
+call String.newLine 0
+call String.appendChar 2
+pop temp 0
+label IF_FALSE0
+push local 0
 return
 function StringFunctions.isDigit 0
 push argument 0
@@ -101,66 +140,26 @@ function StringFunctions.isOpeningBracket 0
 push argument 0
 push constant 40
 eq
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-not
-return
-label IF_FALSE0
-push constant 0
 return
 function StringFunctions.isClosingBracket 0
 push argument 0
 push constant 41
 eq
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-not
-return
-label IF_FALSE0
-push constant 0
 return
 function StringFunctions.isMult 0
 push argument 0
 push constant 42
 eq
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-not
-return
-label IF_FALSE0
-push constant 0
 return
 function StringFunctions.isAdd 0
 push argument 0
 push constant 43
 eq
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-not
-return
-label IF_FALSE0
-push constant 0
 return
 function StringFunctions.isSub 0
 push argument 0
 push constant 45
 eq
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-not
-return
-label IF_FALSE0
-push constant 0
 return
 function StringFunctions.isDiv 0
 push argument 0

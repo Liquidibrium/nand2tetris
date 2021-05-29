@@ -1,0 +1,117 @@
+// may this class rewitten using linked list 
+
+// Least Recently Used
+class LRU_Array {
+    field int maxSize;
+    field Array elems;
+    field int startIndex;// indicates first elements in array 
+    field int endIndex; // indicates new elements index 
+
+    constructor LRU_Array new (int size) {
+        let maxSize = size;
+        let elems = Array.new(size);
+        let startIndex = -1;
+        let endIndex = 1;
+        return this;
+    }
+    
+    method void dispose() {
+        do elemsDispose();
+        do elems.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    function int mode(int num,int mod) {
+        return num - ((num/mod)* mod); 
+    }
+
+    method void add(String elem) {
+        var String tmp ;
+        if (startIndex = endIndex) { // array is full
+            let tmp = elems[startIndex]; // first added should be removed 
+            do tmp.dispose(); 
+            let elems[startIndex] = elem;
+            let startIndex = LRU_Array.mode(startIndex + 1, maxSize);
+            let endIndex = startIndex;
+        } else {
+            if (startIndex = (-1) ) { // array is empty
+                let startIndex = 0;
+                let elems[startIndex] = elem; 
+            } else {
+                let elems[endIndex] = elem;
+                let endIndex = LRU_Array.mode(endIndex + 1, maxSize);
+            }
+        }
+        return;
+    } 
+
+    method void elemsDispose() {
+        var int index ;
+        var String tmp;
+        let index = startIndex;
+        if (index = -1){
+            return;
+        }
+        if (startIndex < endIndex){ 
+            while (index < endIndex ){
+                let tmp = elems[index];
+                do tmp.dispose();
+                let index = index + 1;
+            }
+
+        } else { // array is full 
+            
+            while (index < maxSize ){ 
+                let tmp = elems[index];
+                do tmp.dispose();
+                let index = index + 1;
+            }
+            let index = 0;
+            while (index < endIndex ){
+                let tmp = elems[index];
+                do tmp.dispose();
+                let index = index + 1;
+            }
+        }
+        return;
+    }
+
+    method void clear(){
+        do elemsDispose();
+        let startIndex = -1;
+        let endIndex = 1;
+        return;
+    }
+
+    method void print(){
+        var int index ;
+        let index = startIndex;
+        if (index = -1){
+            return;
+        }
+        if (startIndex < endIndex){
+            while (index < endIndex ){
+                do Output.printString(elems[index]);
+                do Output.println();
+                let index = index + 1;
+            }
+
+        } else { // array is full 
+            while (index < maxSize ){
+                do Output.printString(elems[index]);
+                do Output.println();
+                let index = index + 1;
+            }
+            let index = 0;
+            while (index < endIndex ){
+                do Output.printString(elems[index]);
+                do Output.println();
+                let index = index + 1;
+            }
+        }
+        return;
+    }
+
+
+}

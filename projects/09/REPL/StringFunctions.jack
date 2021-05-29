@@ -24,16 +24,29 @@ class StringFunctions{
         return res;
     }
     
-    function void stringAppend(String first, String second) {
-        var int len;
+    function String stringConcat(String first, String second,bool newLine) {
+        var String newstr;
+        var int firstLen;
+        var int secondLen;
+
         var int i ;
-        let len = second.length();
+        let firstLen = first.length();
+        let secondLen = second.length();
+        let newstr = String.new(firstLen + secondLen+1);
         let i = 0;
-        while (i < len) {
-            do first.appendChar(second.charAt(i));
+        while (i < firstLen) {
+            do newstr.appendChar(first.charAt(i));
             let i = i + 1;
         }
-        return ;
+        let i = 0;
+        while (i < secondLen) {
+            do newstr.appendChar(second.charAt(i));
+            let i = i + 1;
+        }
+        if (newLine){
+            do newstr.appendChar(String.newLine());
+        }
+        return newstr;
    }
 
 
@@ -46,38 +59,23 @@ class StringFunctions{
     }
 
     function boolean isOpeningBracket(char ch) {
-        if(ch = 40 ){
-            return true;
-        }
-        return false;
+        return ch = 40 ;
     }
 
     function boolean isClosingBracket(char ch) {
-        if(ch = 41 ){
-            return true;
-        }
-        return false;
+        return ch = 41;
     }
 
     function boolean isMult(char ch){ // *
-        if(ch = 42) { // *
-            return true;
-        } 
-        return false;
+        return ch = 42;
     }
 
     function boolean isAdd(char ch){ // +
-        if(ch = 43) { // +
-            return true;
-        }
-        return false;
+        return ch = 43;
     }
 
     function boolean isSub(char ch){ // - 
-        if(ch = 45) { // -  
-            return true;
-        }
-        return false;
+        return ch = 45;
     }
 
     function boolean isDiv(char ch){ // / 
