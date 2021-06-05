@@ -1,17 +1,17 @@
 import os
 from glob import glob
-from typing import TextIO, Tuple
-from .tokenizer import Tokenizer
-from .parser import CompileEngine
 from threading import Thread
 
+from .parser import CompileEngine
+from .tokenizer import Tokenizer
+
 JACK_FILE_EXT = ".jack"
-XML_FILE_EXT = "T1.xml"
+XML_FILE_EXT = "2.xml"
 
 
-def analyze_one_file(jack_file_name: str):
+def analyze_one_file(jack_file_name: str) -> None:
     xml_file_name = jack_file_name.replace(JACK_FILE_EXT, XML_FILE_EXT, -1)
-    with open(jack_file_name, 'r') as jack_file, open(xml_file_name, 'w') as xml_file:
+    with open(jack_file_name, "r") as jack_file, open(xml_file_name, "w") as xml_file:
         tokenizer = Tokenizer(jack_file)
         tokenizer.tokenize()
         compiler = CompileEngine(tokenizer, xml_file)
