@@ -51,27 +51,26 @@
           <keyword> return </keyword>
           <expression>
             <term>
-                      <symbol> ; </symbol>
-              <expression>
-                <term>
-                          <symbol> } </symbol>
-                  <expression>
-                    <term>
-                      <keyword> method </keyword>
-                    </term>
-                  <keyword> void </keyword>
-                    <term>
-                      <identifier> dispose </identifier>
-                      <symbol> ( </symbol>
-                      <expressionList>
-                      </expressionList>
-                    </term>
-                  </expression>
-                </term>
-              </expression>
+              <identifier> square </identifier>
             </term>
           </expression>
+          <symbol> ; </symbol>
         </returnStatement>
+      </statements>
+      <symbol> } </symbol>
+    </subroutineBody>
+  </subroutineDec>
+  <subroutineDec>
+    <keyword> method </keyword>
+    <keyword> void </keyword>
+    <identifier> dispose </identifier>
+    <symbol> ( </symbol>
+    <parameterList>
+    </parameterList>
+    <symbol> ) </symbol>
+    <subroutineBody>
+      <symbol> { </symbol>
+      <statements>
         <doStatement>
           <keyword> do </keyword>
           <identifier> square </identifier>
@@ -107,5 +106,57 @@
       <symbol> } </symbol>
     </subroutineBody>
   </subroutineDec>
-  <symbol> } </symbol>
+  <subroutineDec>
+    <keyword> method </keyword>
+    <keyword> void </keyword>
+    <identifier> moveSquare </identifier>
+    <symbol> ( </symbol>
+    <parameterList>
+    </parameterList>
+    <symbol> ) </symbol>
+    <subroutineBody>
+      <symbol> { </symbol>
+      <statements>
+        <ifStatement>
+          <keyword> if </keyword>
+          <symbol> ( </symbol>
+          <expression>
+            <term>
+              <identifier> direction </identifier>
+            </term>
+          </expression>
+          <symbol> ) </symbol>
+          <symbol> { </symbol>
+          <statements>
+            <doStatement>
+              <keyword> do </keyword>
+              <identifier> square </identifier>
+              <symbol> . </symbol>
+              <identifier> moveUp </identifier>
+              <symbol> ( </symbol>
+              <expressionList>
+              </expressionList>
+              <symbol> ) </symbol>
+              <symbol> ; </symbol>
+            </doStatement>
+          </statements>
+          <symbol> } </symbol>
+          <keyword> if </keyword>
+        </ifStatement>
+        <doStatement>
+          <keyword> do </keyword>
+          <identifier> square </identifier>
+          <symbol> . </symbol>
+          <identifier> moveDown </identifier>
+          <symbol> ( </symbol>
+          <expressionList>
+          </expressionList>
+          <symbol> ) </symbol>
+          <symbol> ; </symbol>
+        </doStatement>
+      </statements>
+      <symbol> } </symbol>
+    </subroutineBody>
+  </subroutineDec>
+  <keyword> if </keyword>
 </class>

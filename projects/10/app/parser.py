@@ -159,30 +159,31 @@ class CompileEngine:
         self.write_next_token(level + 1)  # (
         token = self.tokenizer.next_token()
         self.compile_expression(token, level + 1)
+
         self.write_next_token(level + 1)  # )
 
         self.write_next_token(level + 1)  # {
 
         token = self.tokenizer.next_token()
-        if token.additional_info == "}":
+        if token.value == "}":
             self.write_infile(starting_tag(STATEMENTS_TAG_NAME), level + 1)
-            self.write_infile(ending_tag(STATEMENTS_TAG_NAME), level + 1 )
+            self.write_infile(ending_tag(STATEMENTS_TAG_NAME), level + 1)
         else:
-                 # token.additional_info in STATEMENTS:
-                self.compile_statements(token, level + 1)
-                token = self.tokenizer.next_token()
-
-        self.write_infile(get_line_tags(token), level +1 )  # }
-
-        token = self.tokenizer.peek_next_token()
-        if token.value == ELSE:
-            token = self.tokenizer.next_token()
-            self.write_infile(get_line_tags(token), level)  # else
-            token = self.tokenizer.next_token()
-            self.write_infile(get_line_tags(token), level)  # {
-            token = self.tokenizer.next_token()
+            # token.additional_info in STATEMENTS:
             self.compile_statements(token, level + 1)
-            self.write_next_token(level)  # }
+            token = self.tokenizer.next_token()
+
+        self.write_infile(get_line_tags(token), level + 1)  # }
+        token = self.tokenizer.peek_next_token()
+        if token.additional_info == ELSE:
+            token = self.tokenizer.next_token()
+            self.write_infile(get_line_tags(token), level+1)  # else
+            token = self.tokenizer.next_token()
+            self.write_infile(get_line_tags(token), level + 1)  # {
+            token = self.tokenizer.next_token()
+            print(token)
+            self.compile_statements(token, level + 1)
+            # self.write_next_token(level + 1)  # }
 
         self.write_infile(ending_tag(IF_TAG_NAME), level)
 
@@ -228,21 +229,21 @@ class CompileEngine:
 
     def compile_do(self, token, level):
         self.write_infile(starting_tag(DO_TAG_NAME), level)
-        self.write_infile(get_line_tags(token), level + 1)
+        self.write_infile(get_line_tags(token), level + 1)  # do
 
-        self.write_next_token(level + 1)
+        self.write_next_token(level + 1)  # name
 
         token = self.tokenizer.next_token()
         self.write_infile(get_line_tags(token), level + 1)
         if token.value == '(':
             self.compile_expression_list(level + 1)
         elif token.value == ".":
-            self.write_next_token(level + 1)
-            self.write_next_token(level + 1)
+            self.write_next_token(level + 1)  # fun name
+            self.write_next_token(level + 1)  # (
             self.compile_expression_list(level + 1)
 
-        self.write_next_token(level + 1)
-        self.write_next_token(level + 1)
+        self.write_next_token(level + 1)  # )
+        self.write_next_token(level + 1)  # ;
 
         self.write_infile(ending_tag(DO_TAG_NAME), level)
 
@@ -251,16 +252,14 @@ class CompileEngine:
         self.write_infile(get_line_tags(next_token), level + 1)
         next_token = self.tokenizer.next_token()
         if next_token.value != ";":
-            token = self.tokenizer.next_token()
-            self.compile_expression(token, level + 1)
-            next_token = self.tokenizer.peek_next_token()
-        else:
-            self.write_infile(get_line_tags(next_token), level + 1)
+            self.compile_expression(next_token, level + 1)
+            next_token = self.tokenizer.next_token()
+
+        self.write_infile(get_line_tags(next_token), level + 1)
 
         self.write_infile(ending_tag(RETURN_TAG_NAME), level)
 
     def compile_term(self, token, level) -> None:
-        print("term", token, level)
         self.write_infile(starting_tag(TERM_TAG_NAME), level)
         if token.category in (KEYWORD, STRING_CONSTANT, INT_CONSTANT):
             self.write_infile(get_line_tags(token), level + 1)
@@ -299,7 +298,6 @@ class CompileEngine:
 
     def compile_expression(self, token, level):
         self.write_infile(starting_tag(EXPRESSION_TAG_NAME), level)
-        print("express  ", token)
         self.compile_term(token, level + 1)
 
         token = self.tokenizer.peek_next_token()
@@ -315,7 +313,6 @@ class CompileEngine:
     def compile_expression_list(self, level):
         self.write_infile(starting_tag(EXPRESSION_LIST_TAG_NAME), level)
         token = self.tokenizer.peek_next_token()
-        print("list - ", token)
         if token.value == ')':
             self.write_infile(ending_tag(EXPRESSION_LIST_TAG_NAME), level)
             return
@@ -328,5 +325,4 @@ class CompileEngine:
             token = self.tokenizer.next_token()
             self.compile_expression(token, level + 1)
             token = self.tokenizer.next_token()
-        print("error - ", token)
         self.write_infile(ending_tag(EXPRESSION_LIST_TAG_NAME), level)
