@@ -1,11 +1,11 @@
 from collections import deque
-from typing import TextIO, Deque
+from typing import Deque, Optional, TextIO, Tuple
 
 from app.constants import *
 
 
 class Token:
-    def __init__(self, value: str, category: str, additional_info: str):
+    def __init__(self, value: str, category: str, additional_info: Optional[str]):
         self.value = value
         self.category = category
         self.additional_info = additional_info
@@ -16,7 +16,7 @@ class Token:
     def token_value(self) -> str:
         return self.value
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f" {self.value} {self.category}  {self.additional_info}"
 
 
@@ -28,7 +28,7 @@ def filter_inline_comment(line: str) -> str:
     return line
 
 
-def get_token_category(only_word: str) -> tuple[str, any]:
+def get_token_category(only_word: str) -> Tuple:
     additional_tag_name = KEYWORDS.get(only_word, None)
     if additional_tag_name:
         return KEYWORD, additional_tag_name
@@ -60,9 +60,13 @@ class Tokenizer:
                             continue
                         comment_ending_index = line.find(MULTI_LINE_COMMENT_ENDS)
                         if comment_ending_index != -1:  # found */ in middle of line
-                            line = (line[:comment_starting_index]
-                                    + line[comment_ending_index
-                                           + len(MULTI_LINE_COMMENT_ENDS):])
+                            line = (
+                                line[:comment_starting_index]
+                                + line[
+                                    comment_ending_index
+                                    + len(MULTI_LINE_COMMENT_ENDS) :
+                                ]
+                            )
                         else:  # not found ending
                             multi_line_comment = True
                             continue
@@ -75,8 +79,9 @@ class Tokenizer:
                     comment_ending_index = line.find(MULTI_LINE_COMMENT_ENDS)
                     if comment_ending_index != -1:  # found */ in middle of line
                         multi_line_comment = False
-                        line = line[comment_ending_index
-                                    + len(MULTI_LINE_COMMENT_ENDS):].lstrip()
+                        line = line[
+                            comment_ending_index + len(MULTI_LINE_COMMENT_ENDS) :
+                        ].lstrip()
                     elif multi_line_comment:
                         continue
 
@@ -123,7 +128,7 @@ class Tokenizer:
             else:
                 self.__get_tokens(word[:symbol_index])
                 self.tokens.append(Token(symbol, SYMBOL, add))
-                self.__get_tokens(word[symbol_index + 1:])
+                self.__get_tokens(word[symbol_index + 1 :])
             break
         if not_with_symbol:
             category, additional = get_token_category(word)
@@ -135,7 +140,7 @@ class Tokenizer:
     def next_token(self) -> Token:
         return self.tokens.popleft()
 
-    def peek_next_token(self):
+    def peek_next_token(self) -> Token:
         tkn = self.tokens.popleft()
         self.tokens.appendleft(tkn)
         return tkn

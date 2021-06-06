@@ -1,14 +1,9 @@
-import threading
 from typing import TextIO
 
 from app.constants import *
 from app.tokenizer import Token, Tokenizer
 
 STATEMENTS = (LET_TAG_NAME, IF_TAG_NAME, WHILE_TAG_NAME, DO_TAG_NAME, RETURN_TAG_NAME)
-
-from threading import Lock
-
-lock = Lock()
 
 
 def starting_tag(tag_name: str) -> str:
@@ -31,7 +26,7 @@ class CompileEngine:
     def write_infile(self, line: str, level: int = 0) -> None:
         self.out_file.write(("  " * level) + line + "\n")
 
-    def write_next_token(self, level):
+    def write_next_token(self, level: int) -> None:
         self.write_infile(get_line_tags(self.tokenizer.next_token()), level)
 
     def compile_for_tokenizer_test(self) -> None:
@@ -46,7 +41,7 @@ class CompileEngine:
         # while self.tokenizer.has_more_token():
         self.compile_class(level)
 
-    def compile_class(self, level):
+    def compile_class(self, level: int) -> None:
         self.write_infile(starting_tag(CLASS_TAG_NAME))  # <class>
         self.write_next_token(level + 1)  # class
         self.write_next_token(level + 1)  # name
@@ -63,27 +58,29 @@ class CompileEngine:
         self.write_infile(get_line_tags(next_token), level + 1)  # }
         self.write_infile(ending_tag(CLASS_TAG_NAME))  # </class>
 
-    def compile_class_var(self, level, token):
+    def compile_class_var(self, level: int, token: Token) -> None:
         self.write_infile(starting_tag(CLASS_VAR_DEC_TAG_NAME), level)
         self.compile_variable(token, level + 1)
         self.write_infile(ending_tag(CLASS_VAR_DEC_TAG_NAME), level)
 
-    def compile_variable(self, token, level):
+    def compile_variable(self, token: Token, level: int) -> None:
         self.write_infile(get_line_tags(token), level)  # field | static | var
         self.write_next_token(level)  # type
         self.write_next_token(level)  # name
 
         next_token = self.tokenizer.next_token()
-        while next_token.value == ',':
+        while next_token.value == ",":
             self.write_infile(get_line_tags(next_token), level)  # ,
             self.write_next_token(level)  # name
             next_token = self.tokenizer.next_token()
 
         self.write_infile(get_line_tags(next_token), level)  # ;
 
-    def compile_subroutine(self, level, next_token):
+    def compile_subroutine(self, level: int, next_token: Token) -> None:
         self.write_infile(starting_tag(SUBROUTINE_DEC_TAG_NAME), level)
-        self.write_infile(get_line_tags(next_token), level + 1)  # function | method | constructor
+        self.write_infile(
+            get_line_tags(next_token), level + 1
+        )  # function | method | constructor
         self.write_next_token(level + 1)  # return type
         self.write_next_token(level + 1)  # name
         self.write_next_token(level + 1)  # (
@@ -91,10 +88,10 @@ class CompileEngine:
         self.compile_subroutine_body(level + 1)
         self.write_infile(ending_tag(SUBROUTINE_DEC_TAG_NAME), level)
 
-    def compile_parameters(self, level):
+    def compile_parameters(self, level: int) -> None:
         self.write_infile(starting_tag(PARAMETER_LIST_TAG_NAME), level)
         next_token = self.tokenizer.next_token()
-        if next_token.value == ')':
+        if next_token.value == ")":
             self.write_infile(ending_tag(PARAMETER_LIST_TAG_NAME), level)
             self.write_infile(get_line_tags(next_token), level)
             return
@@ -103,7 +100,7 @@ class CompileEngine:
         self.write_next_token(level + 1)  # name
 
         next_token = self.tokenizer.next_token()
-        while next_token.value != ')':
+        while next_token.value != ")":
             self.write_infile(get_line_tags(next_token), level + 1)  # ,
             self.write_next_token(level + 1)  # type
             self.write_next_token(level + 1)  # name
@@ -112,12 +109,12 @@ class CompileEngine:
         self.write_infile(ending_tag(PARAMETER_LIST_TAG_NAME), level)
         self.write_infile(get_line_tags(next_token), level)  # )
 
-    def compile_subroutine_body(self, level):
+    def compile_subroutine_body(self, level: int) -> None:
         self.write_infile(starting_tag(SUBROUTINE_BODY_TAG_NAME), level)
         self.write_next_token(level + 1)
 
         next_token = self.tokenizer.peek_next_token()
-        if next_token.value == '}':
+        if next_token.value == "}":
             self.write_infile(ending_tag(SUBROUTINE_BODY_TAG_NAME), level)
             # self.write_infile(get_line_tags(next_token), level)
             return
@@ -135,14 +132,14 @@ class CompileEngine:
         self.write_infile(ending_tag(SUBROUTINE_BODY_TAG_NAME), level)
         # self.write_infile(get_line_tags(next_token), level)  # }
 
-    def compile_subroutine_variable(self, next_token, level):
+    def compile_subroutine_variable(self, next_token: Token, level: int) -> None:
         self.write_infile(starting_tag(VAR_DEC_TAG_NAME), level)
         self.compile_variable(next_token, level + 1)
         self.write_infile(ending_tag(VAR_DEC_TAG_NAME), level)
 
-    def compile_statements(self, token, level) -> None:
+    def compile_statements(self, token: Token, level: int) -> None:
         self.write_infile(starting_tag(STATEMENTS_TAG_NAME), level)
-        while token.value != '}':
+        while token.value != "}":
             if token.additional_info == LET_TAG_NAME:
                 self.compile_let(token, level + 1)
             elif token.additional_info == IF_TAG_NAME:
@@ -157,7 +154,7 @@ class CompileEngine:
         self.write_infile(ending_tag(STATEMENTS_TAG_NAME), level)
         self.write_infile(get_line_tags(token), level)  # }
 
-    def compile_if(self, token, level: int) -> None:
+    def compile_if(self, token: Token, level: int) -> None:
         self.write_infile(starting_tag(IF_TAG_NAME), level)
         self.write_infile(get_line_tags(token), level + 1)  # if
         self.write_next_token(level + 1)  # (
@@ -188,7 +185,7 @@ class CompileEngine:
 
         self.write_infile(ending_tag(IF_TAG_NAME), level)
 
-    def compile_while(self, token, level) -> None:
+    def compile_while(self, token: Token, level: int) -> None:
         self.write_infile(starting_tag(WHILE_TAG_NAME), level)
         self.write_infile(get_line_tags(token), level + 1)
 
@@ -202,14 +199,14 @@ class CompileEngine:
 
         self.write_infile(ending_tag(WHILE_TAG_NAME), level)
 
-    def compile_let(self, next_token, level):
+    def compile_let(self, next_token: Token, level: int) -> None:
         self.write_infile(starting_tag(LET_TAG_NAME), level)
         self.write_infile(get_line_tags(next_token), level + 1)  # let
 
         self.write_next_token(level + 1)  # variable name
 
         next_token = self.tokenizer.next_token()
-        if next_token.value == '[':
+        if next_token.value == "[":
             self.write_infile(get_line_tags(next_token), level + 1)  # [
 
             token = self.tokenizer.next_token()
@@ -228,7 +225,7 @@ class CompileEngine:
 
         self.write_infile(ending_tag(LET_TAG_NAME), level)
 
-    def compile_do(self, token, level):
+    def compile_do(self, token: Token, level: int) -> None:
         self.write_infile(starting_tag(DO_TAG_NAME), level)
         self.write_infile(get_line_tags(token), level + 1)  # do
 
@@ -236,7 +233,7 @@ class CompileEngine:
 
         token = self.tokenizer.next_token()
         self.write_infile(get_line_tags(token), level + 1)
-        if token.value == '(':
+        if token.value == "(":
             self.compile_expression_list(level + 1)
         elif token.value == ".":
             self.write_next_token(level + 1)  # fun name
@@ -248,7 +245,7 @@ class CompileEngine:
 
         self.write_infile(ending_tag(DO_TAG_NAME), level)
 
-    def compile_return(self, next_token, level):
+    def compile_return(self, next_token: Token, level: int) -> None:
         self.write_infile(starting_tag(RETURN_TAG_NAME), level)
         self.write_infile(get_line_tags(next_token), level + 1)
         next_token = self.tokenizer.next_token()
@@ -260,7 +257,7 @@ class CompileEngine:
 
         self.write_infile(ending_tag(RETURN_TAG_NAME), level)
 
-    def compile_term(self, token, level) -> None:
+    def compile_term(self, token: Token, level: int) -> None:
         self.write_infile(starting_tag(TERM_TAG_NAME), level)
         if token.category in (KEYWORD, STRING_CONSTANT, INT_CONSTANT):
             self.write_infile(get_line_tags(token), level + 1)
@@ -269,7 +266,7 @@ class CompileEngine:
                 self.write_infile(get_line_tags(token), level + 1)
                 token = self.tokenizer.next_token()
                 self.compile_term(token, level + 1)
-            elif token.value == '(':
+            elif token.value == "(":
                 self.write_infile(get_line_tags(token), level + 1)
                 token = self.tokenizer.next_token()
                 self.compile_expression(token, level + 1)
@@ -282,18 +279,18 @@ class CompileEngine:
         elif token.category == IDENTIFIER:
             self.write_infile(get_line_tags(token), level + 1)
             token = self.tokenizer.peek_next_token()
-            if token.value == '.':
+            if token.value == ".":
                 token = self.tokenizer.next_token()
                 self.write_infile(get_line_tags(token), level + 1)  # .
                 self.write_next_token(level + 1)  # name
                 self.write_next_token(level + 1)  # (
                 self.compile_expression_list(level + 1)
                 self.write_next_token(level + 1)  # )
-            if token.value == '(':
+            if token.value == "(":
                 token = self.tokenizer.next_token()
                 self.write_infile(get_line_tags(token), level + 1)  # (
                 self.compile_expression_list(level + 1)
-            elif token.value == '[':
+            elif token.value == "[":
                 token = self.tokenizer.next_token()
                 self.write_infile(get_line_tags(token), level + 1)  # [
                 token = self.tokenizer.next_token()
@@ -301,13 +298,13 @@ class CompileEngine:
                 self.write_next_token(level + 1)
         self.write_infile(ending_tag(TERM_TAG_NAME), level)
 
-    def compile_expression(self, token, level):
+    def compile_expression(self, token: Token, level: int) -> None:
         self.write_infile(starting_tag(EXPRESSION_TAG_NAME), level)
         self.compile_term(token, level + 1)
 
         token = self.tokenizer.peek_next_token()
 
-        while token.value not in (',', ')', ';', ']'):
+        while token.value not in (",", ")", ";", "]"):
             self.write_next_token(level)
             token = self.tokenizer.next_token()
             self.compile_term(token, level + 1)
@@ -315,16 +312,16 @@ class CompileEngine:
 
         self.write_infile(ending_tag(EXPRESSION_TAG_NAME), level)
 
-    def compile_expression_list(self, level):
+    def compile_expression_list(self, level: int) -> None:
         self.write_infile(starting_tag(EXPRESSION_LIST_TAG_NAME), level)
         token = self.tokenizer.peek_next_token()
-        if token.value == ')':
+        if token.value == ")":
             self.write_infile(ending_tag(EXPRESSION_LIST_TAG_NAME), level)
             return
         token = self.tokenizer.next_token()
         self.compile_expression(token, level + 1)
         token = self.tokenizer.peek_next_token()
-        while token.value == ',':
+        while token.value == ",":
             token = self.tokenizer.next_token()
             self.write_infile(get_line_tags(token), level)  # ,
             token = self.tokenizer.next_token()
