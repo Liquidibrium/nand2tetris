@@ -95,7 +95,7 @@
             <term>
               <identifier> i </identifier>
             </term>
-            <symbol> &lt; </symbol>
+          <symbol> &lt; </symbol>
             <term>
               <identifier> length </identifier>
             </term>
@@ -140,7 +140,7 @@
                 <term>
                   <identifier> i </identifier>
                 </term>
-                <symbol> + </symbol>
+              <symbol> + </symbol>
                 <term>
                   <integerConstant> 1 </integerConstant>
                 </term>
@@ -179,7 +179,7 @@
             <term>
               <identifier> i </identifier>
             </term>
-            <symbol> &lt; </symbol>
+          <symbol> &lt; </symbol>
             <term>
               <identifier> length </identifier>
             </term>
@@ -195,7 +195,7 @@
                 <term>
                   <identifier> sum </identifier>
                 </term>
-                <symbol> + </symbol>
+              <symbol> + </symbol>
                 <term>
                   <identifier> a </identifier>
                   <symbol> [ </symbol>
@@ -217,7 +217,7 @@
                 <term>
                   <identifier> i </identifier>
                 </term>
-                <symbol> + </symbol>
+              <symbol> + </symbol>
                 <term>
                   <integerConstant> 1 </integerConstant>
                 </term>
@@ -254,7 +254,7 @@
               <term>
                 <identifier> sum </identifier>
               </term>
-              <symbol> / </symbol>
+            <symbol> / </symbol>
               <term>
                 <identifier> length </identifier>
               </term>

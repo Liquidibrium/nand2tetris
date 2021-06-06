@@ -17,7 +17,7 @@ class Token:
         return self.value
 
     def __str__(self):
-        return f"val:{self.value} cat: {self.category} add: {self.additional_info}"
+        return f" {self.value} {self.category}  {self.additional_info}"
 
 
 # remove comments and white spaces from beginning and end of line
@@ -134,3 +134,8 @@ class Tokenizer:
 
     def next_token(self) -> Token:
         return self.tokens.popleft()
+
+    def peek_next_token(self):
+        tkn = self.tokens.popleft()
+        self.tokens.appendleft(tkn)
+        return tkn

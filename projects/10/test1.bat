@@ -3,7 +3,11 @@ C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\TextComparer.bat .\ArrayTes
 
 @REM python jack_analyzer.py  --target ExpressionLessSquare
 C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\TextComparer.bat .\ExpressionLessSquare\mainT.xml .\ExpressionLessSquare\MainT1.xml
+C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\TextComparer.bat .\ExpressionLessSquare\main.xml .\ExpressionLessSquare\Main2.xml
+
 C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\TextComparer.bat .\ExpressionLessSquare\SquareGameT.xml .\ExpressionLessSquare\SquareGameT1.xml
+C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\TextComparer.bat .\ExpressionLessSquare\SquareGameT.xml .\ExpressionLessSquare\SquareGameT1.xml
+C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\TextComparer.bat .\ExpressionLessSquare\SquareT.xml .\ExpressionLessSquare\SquareT1.xml
 C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\TextComparer.bat .\ExpressionLessSquare\SquareT.xml .\ExpressionLessSquare\SquareT1.xml
 
 @REM python jack_analyzer.py  --target Square
