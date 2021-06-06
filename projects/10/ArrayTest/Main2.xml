@@ -1,0 +1,267 @@
+<class>
+  <keyword> class </keyword>
+  <identifier> Main </identifier>
+  <symbol> { </symbol>
+  <subroutineDec>
+    <keyword> function </keyword>
+    <keyword> void </keyword>
+    <identifier> main </identifier>
+    <symbol> ( </symbol>
+    <parameterList>
+    </parameterList>
+    <symbol> ) </symbol>
+    <subroutineBody>
+      <symbol> { </symbol>
+      <varDec>
+        <keyword> var </keyword>
+        <identifier> Array </identifier>
+        <identifier> a </identifier>
+        <symbol> ; </symbol>
+      </varDec>
+      <varDec>
+        <keyword> var </keyword>
+        <keyword> int </keyword>
+        <identifier> length </identifier>
+        <symbol> ; </symbol>
+      </varDec>
+      <varDec>
+        <keyword> var </keyword>
+        <keyword> int </keyword>
+        <identifier> i </identifier>
+        <symbol> , </symbol>
+        <identifier> sum </identifier>
+        <symbol> ; </symbol>
+      </varDec>
+      <statements>
+        <letStatement>
+          <keyword> let </keyword>
+          <identifier> length </identifier>
+          <symbol> = </symbol>
+          <expression>
+            <term>
+              <identifier> Keyboard </identifier>
+              <symbol> . </symbol>
+              <identifier> readInt </identifier>
+              <symbol> ( </symbol>
+              <expressionList>
+                <expression>
+                  <term>
+                    <stringConstant> HOW MANY NUMBERS?  </stringConstant>
+                  </term>
+                <symbol> ) </symbol>
+                </expression>
+              <symbol> ; </symbol>
+                <term>
+                  <keyword> let </keyword>
+                </term>
+              <identifier> a </identifier>
+                <term>
+                  <symbol> = </symbol>
+                  <expression>
+                    <term>
+                      <identifier> Array </identifier>
+                      <symbol> . </symbol>
+                      <identifier> new </identifier>
+                      <symbol> ( </symbol>
+                      <expressionList>
+                        <expression>
+                          <term>
+                            <identifier> length </identifier>
+                          </term>
+                        <symbol> ; </symbol>
+                        </expression>
+                      <keyword> let </keyword>
+                        <term>
+                          <identifier> i </identifier>
+                        </term>
+                      <integerConstant> 0 </integerConstant>
+                        <term>
+                          <symbol> ; </symbol>
+                          <expression>
+                            <term>
+                              <keyword> while </keyword>
+                            </term>
+                          <symbol> ( </symbol>
+                            <term>
+                              <identifier> i </identifier>
+                            </term>
+                          <identifier> length </identifier>
+                            <term>
+                              <symbol> ) </symbol>
+                              <expression>
+                                <term>
+                                  <symbol> { </symbol>
+                                  <expression>
+                                    <term>
+                                      <keyword> let </keyword>
+                                    </term>
+                                  <identifier> a </identifier>
+                                    <term>
+                                      <symbol> [ </symbol>
+                                      <expression>
+                                        <term>
+                                          <identifier> i </identifier>
+                                        </term>
+                                      <symbol> = </symbol>
+                                        <term>
+                                          <identifier> Keyboard </identifier>
+                                          <symbol> . </symbol>
+                                          <identifier> readInt </identifier>
+                                          <symbol> ( </symbol>
+                                          <expressionList>
+                                            <expression>
+                                              <term>
+                                                <stringConstant> ENTER THE NEXT NUMBER:  </stringConstant>
+                                              </term>
+                                            <symbol> ) </symbol>
+                                            </expression>
+                                          <symbol> ; </symbol>
+                                            <term>
+                                              <keyword> let </keyword>
+                                            </term>
+                                          <identifier> i </identifier>
+                                            <term>
+                                              <symbol> = </symbol>
+                                              <expression>
+                                                <term>
+                                                  <identifier> i </identifier>
+                                                </term>
+                                              <integerConstant> 1 </integerConstant>
+                                                <term>
+                                                  <symbol> ; </symbol>
+                                                  <expression>
+                                                    <term>
+                                                      <symbol> } </symbol>
+                                                      <expression>
+                                                        <term>
+                                                          <keyword> let </keyword>
+                                                        </term>
+                                                      <identifier> i </identifier>
+                                                        <term>
+                                                          <symbol> = </symbol>
+                                                          <expression>
+                                                            <term>
+                                                              <integerConstant> 0 </integerConstant>
+                                                            </term>
+                                                          <symbol> ; </symbol>
+                                                          </expression>
+                                                          <keyword> let </keyword>
+                                                        </term>
+                                                      <identifier> sum </identifier>
+                                                        <term>
+                                                          <symbol> = </symbol>
+                                                          <expression>
+                                                            <term>
+                                                              <integerConstant> 0 </integerConstant>
+                                                            </term>
+                                                          <symbol> ; </symbol>
+                                                          </expression>
+                                                          <keyword> while </keyword>
+                                                        </term>
+                                                      <symbol> ( </symbol>
+                                                        <term>
+                                                          <identifier> i </identifier>
+                                                        </term>
+                                                      <identifier> length </identifier>
+                                                        <term>
+                                                          <symbol> ) </symbol>
+                                                          <expression>
+                                                            <term>
+                                                              <symbol> { </symbol>
+                                                              <expression>
+                                                                <term>
+                                                                  <keyword> let </keyword>
+                                                                </term>
+                                                              <identifier> sum </identifier>
+                                                                <term>
+                                                                  <symbol> = </symbol>
+                                                                  <expression>
+                                                                    <term>
+                                                                      <identifier> sum </identifier>
+                                                                    </term>
+                                                                  <identifier> a </identifier>
+                                                                    <term>
+                                                                      <symbol> [ </symbol>
+                                                                      <expression>
+                                                                        <term>
+                                                                          <identifier> i </identifier>
+                                                                        </term>
+                                                                      <symbol> ; </symbol>
+                                                                      </expression>
+                                                                      <keyword> let </keyword>
+                                                                    </term>
+                                                                  <identifier> i </identifier>
+                                                                    <term>
+                                                                      <symbol> = </symbol>
+                                                                      <expression>
+                                                                        <term>
+                                                                          <identifier> i </identifier>
+                                                                        </term>
+                                                                      <integerConstant> 1 </integerConstant>
+                                                                        <term>
+                                                                          <symbol> ; </symbol>
+                                                                          <expression>
+                                                                            <term>
+                                                                              <symbol> } </symbol>
+                                                                              <expression>
+                                                                                <term>
+                                                                                  <keyword> do </keyword>
+                                                                                </term>
+                                                                              <identifier> Output </identifier>
+                                                                                <term>
+                                                                                  <symbol> . </symbol>
+                                                                                  <expression>
+                                                                                    <term>
+                                                                                      <identifier> printString </identifier>
+                                                                                      <symbol> ( </symbol>
+                                                                                      <expressionList>
+                                                                                        <expression>
+                                                                                          <term>
+                                                                                            <stringConstant> THE AVERAGE IS:  </stringConstant>
+                                                                                          </term>
+                                                                                        <symbol> ) </symbol>
+                                                                                        </expression>
+                                                                                      <symbol> ; </symbol>
+                                                                                        <term>
+                                                                                          <keyword> do </keyword>
+                                                                                        </term>
+                                                                                      <identifier> Output </identifier>
+                                                                                        <term>
+                                                                                          <symbol> . </symbol>
+                                                                                          <expression>
+                                                                                            <term>
+                                                                                              <identifier> printInt </identifier>
+                                                                                              <symbol> ( </symbol>
+                                                                                              <expressionList>
+                                                                                                <expression>
+                                                                                                  <term>
+                                                                                                    <identifier> sum </identifier>
+                                                                                                  </term>
+                                                                                                <identifier> length </identifier>
+                                                                                                  <term>
+                                                                                                    <symbol> ) </symbol>
+                                                                                                    <expression>
+                                                                                                      <term>
+                                                                                                        <symbol> ; </symbol>
+                                                                                                        <expression>
+                                                                                                          <term>
+                                                                                                            <keyword> do </keyword>
+                                                                                                          </term>
+                                                                                                        <identifier> Output </identifier>
+                                                                                                          <term>
+                                                                                                            <symbol> . </symbol>
+                                                                                                            <expression>
+                                                                                                              <term>
+                                                                                                                <identifier> println </identifier>
+                                                                                                                <symbol> ( </symbol>
+                                                                                                                <expressionList>
+                                                                                                                </expressionList>
+                                                                                                                <symbol> ) </symbol>
+                                                                                                                <symbol> ; </symbol>
+                                                                                                                <keyword> return </keyword>
+                                                                                                              </term>
+                                                                                                            <symbol> ; </symbol>
+                                                                                                            </expression>
+                                                                                                            <symbol> } </symbol>
+                                                                                                          </term>
+                                                                                                        <symbol> } </symbol>

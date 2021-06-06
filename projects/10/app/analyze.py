@@ -2,8 +2,8 @@ import os
 from glob import glob
 from threading import Thread
 
-from .parser import CompileEngine
-from .tokenizer import Tokenizer
+from app.parser import CompileEngine
+from app.tokenizer import Tokenizer
 
 JACK_FILE_EXT = ".jack"
 XML_FILE_EXT = "2.xml"
