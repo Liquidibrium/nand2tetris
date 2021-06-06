@@ -1,0 +1,11 @@
+
+class Square {
+
+   method void incSize() {
+      if (x) {
+         let x = x;
+      }
+      return;
+   }
+
+}

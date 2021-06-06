@@ -1,9 +1,14 @@
+import threading
 from typing import TextIO
 
 from app.constants import *
 from app.tokenizer import Token, Tokenizer
 
 STATEMENTS = (LET_TAG_NAME, IF_TAG_NAME, WHILE_TAG_NAME, DO_TAG_NAME, RETURN_TAG_NAME)
+
+from threading import Lock
+
+lock = Lock()
 
 
 def starting_tag(tag_name: str) -> str:
@@ -155,10 +160,8 @@ class CompileEngine:
     def compile_if(self, token, level: int) -> None:
         self.write_infile(starting_tag(IF_TAG_NAME), level)
         self.write_infile(get_line_tags(token), level + 1)  # if
-        print(1, token)
         self.write_next_token(level + 1)  # (
         token = self.tokenizer.next_token()
-        print(2, token)
         self.compile_expression(token, level + 1)
 
         self.write_next_token(level + 1)  # )
@@ -166,25 +169,20 @@ class CompileEngine:
         self.write_next_token(level + 1)  # {
 
         token = self.tokenizer.next_token()
-        print(3, token)
         if token.value == "}":
             self.write_infile(starting_tag(STATEMENTS_TAG_NAME), level + 1)
             self.write_infile(ending_tag(STATEMENTS_TAG_NAME), level + 1)
+            self.write_infile(get_line_tags(token), level + 1)  # }
         else:
-            # token.additional_info in STATEMENTS:
             self.compile_statements(token, level + 1)
-            token = self.tokenizer.next_token()
-        print(4, token)
-        self.write_infile(get_line_tags(token), level + 1)  # }
+
         token = self.tokenizer.peek_next_token()
-        print(5, token)
         if token.additional_info == ELSE:
             token = self.tokenizer.next_token()
             self.write_infile(get_line_tags(token), level + 1)  # else
             token = self.tokenizer.next_token()
             self.write_infile(get_line_tags(token), level + 1)  # {
             token = self.tokenizer.next_token()
-            print(token)
             self.compile_statements(token, level + 1)
             # self.write_next_token(level + 1)  # }
 
@@ -271,9 +269,13 @@ class CompileEngine:
                 self.write_infile(get_line_tags(token), level + 1)
                 token = self.tokenizer.next_token()
                 self.compile_term(token, level + 1)
+            elif token.value == '(':
+                self.write_infile(get_line_tags(token), level + 1)
+                token = self.tokenizer.next_token()
+                self.compile_expression(token, level + 1)
+                self.write_next_token(level + 1)
             else:
-                print("Dead line ")
-                self.write_infile(get_line_tags(token), level + 5)
+                self.write_infile(get_line_tags(token), level + 1)
                 token = self.tokenizer.next_token()
                 self.compile_expression(token, level + 1)
 
