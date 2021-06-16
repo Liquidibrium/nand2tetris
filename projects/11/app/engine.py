@@ -18,7 +18,13 @@ def get_line_tags(token: Token) -> str:
     return f"{starting_tag(token.category)} {token.value} {ending_tag(token.category)}"
 
 
-label = "Label_my_"
+IF = "Label_my_"
+IF_TRUE = "IF_TRUE"
+IF_FALSE = "IF_FALSE"
+IF_END = "IF_END"
+
+WHILE_EXP = "WHILE_EXP"
+WHILE_END = "WHILE_END"
 
 
 class CompileEngine:
@@ -31,7 +37,8 @@ class CompileEngine:
         self.this_fun_name = None
         self.this_fun_type = None
         self.class_name = name
-        self.label_count = 0
+        self.if_count = 0
+        self.while_count = 0
 
     def compile(self):
         with open(self.name + ".xml", 'w') as self.out_file:
@@ -77,7 +84,7 @@ class CompileEngine:
         self.write_next_token(level)  # type
         s_name = self.tokenizer.peek_next_token().value
         self.write_next_token(level)  # name
-        # print(s_kind,s_type,s_name)
+        print(s_name, s_type, s_kind)
         self.symbol_table.define(s_name, s_type, s_kind)
 
         next_token = self.tokenizer.next_token()
@@ -85,11 +92,12 @@ class CompileEngine:
             self.write_infile(get_line_tags(next_token), level)  # ,
 
             s_name = self.tokenizer.peek_next_token().value
+            print(s_name, s_type, s_kind)
             self.symbol_table.define(s_name, s_type, s_kind)
 
             self.write_next_token(level)  # name
             next_token = self.tokenizer.next_token()
-
+        print(self.symbol_table)
         self.write_infile(get_line_tags(next_token), level)  # ;
 
     def compile_subroutine(self, level: int, next_token: Token) -> None:
@@ -124,15 +132,15 @@ class CompileEngine:
         s_name = self.tokenizer.peek_next_token().value
         self.write_next_token(level + 1)  # name
 
-        self.symbol_table.define(s_name, s_type, "arg")
+        self.symbol_table.define(s_name, s_type, ARG_KIND)
 
         next_token = self.tokenizer.next_token()
         while next_token.value != ")":
             self.write_infile(get_line_tags(next_token), level + 1)  # ,
-            s_type = self.tokenizer.next_token().value
+            s_type = self.tokenizer.peek_next_token().value
             self.write_next_token(level + 1)  # type
-            s_name = self.tokenizer.next_token().value
-            self.symbol_table.define(s_name, s_type, "arg")
+            s_name = self.tokenizer.peek_next_token().value
+            self.symbol_table.define(s_name, s_type, ARG_KIND)
             self.write_next_token(level + 1)  # name
             next_token = self.tokenizer.next_token()
 
@@ -164,7 +172,7 @@ class CompileEngine:
             self.symbol_table.start_sub()
         elif self.this_fun_type == "method":
             self.vm_writer.push(ARG, 0)
-            self.vm_writer.push(POINTER, 0)
+            self.vm_writer.pop(POINTER, 0)
 
         if next_token.additional_info in STATEMENTS:
             next_token = self.tokenizer.next_token()
@@ -206,8 +214,8 @@ class CompileEngine:
         self.write_next_token(level + 1)  # )
 
         self.vm_writer.arithmetic('~')
-        first_label = label + str(self.label_count)
-        self.label_count += 1
+        self.if_count += 1
+        first_label = IF_FALSE + str(self.if_count)
         self.vm_writer.w_if(first_label)
 
         self.write_next_token(level + 1)  # {
@@ -220,9 +228,11 @@ class CompileEngine:
         else:
             self.compile_statements(token, level + 1)
 
-        second_label = label + str(self.label_count)
-        self.label_count += 1
+        second_label = IF_END + str(self.if_count)
+        # self.if_count += 1
         self.vm_writer.goto(second_label)
+
+        self.vm_writer.label(first_label)
 
         token = self.tokenizer.peek_next_token()
         if token.additional_info == ELSE:
@@ -230,22 +240,19 @@ class CompileEngine:
             self.write_infile(get_line_tags(token), level + 1)  # else
             token = self.tokenizer.next_token()
             self.write_infile(get_line_tags(token), level + 1)  # {
-            self.vm_writer.label(first_label)
+            # self.vm_writer.label(first_label)
             token = self.tokenizer.next_token()
             self.compile_statements(token, level + 1)
             # self.write_next_token(level + 1)  # }
-        else:
-            self.vm_writer.label(first_label)
 
         self.vm_writer.label(second_label)
 
         self.write_infile(ending_tag(IF_TAG_NAME), level)
 
     def compile_while(self, token: Token, level: int) -> None:
-        first_label = label + str(self.label_count)
-        self.label_count += 1
-        second_label = label + str(self.label_count)
-        self.label_count += 1
+        first_label = WHILE_EXP + str(self.while_count)
+        second_label = WHILE_END + str(self.while_count)
+        self.while_count += 1
         self.vm_writer.label(first_label)
 
         self.write_infile(starting_tag(WHILE_TAG_NAME), level)
@@ -269,9 +276,9 @@ class CompileEngine:
     def push_variable(self, s_name):
         kind = self.symbol_table.kind_of(s_name)
         if kind == ARG_KIND:
-            self.vm_writer.push(ARG, SymbolTable.index_of(s_name))
-        elif kind != VAR_KIND:
-            self.vm_writer.push(LOCAL, SymbolTable.index_of(s_name))
+            self.vm_writer.push(ARG, self.symbol_table.index_of(s_name))
+        elif kind == VAR_KIND:
+            self.vm_writer.push(LOCAL, self.symbol_table.index_of(s_name))
         else:
             self.symbol_table.end_sub_routine()
             if self.symbol_table.kind_of(s_name) != NONE_KIND:
@@ -325,7 +332,7 @@ class CompileEngine:
             if class_kind == STATIC_KIND:
                 self.vm_writer.pop(STATIC, self.symbol_table.index_of(s_name))
             else:
-                assert kind == FIELD_KIND
+                assert class_kind == FIELD_KIND
                 if not is_arr:
                     self.vm_writer.pop(THIS, self.symbol_table.index_of(s_name))
                 else:
@@ -345,7 +352,7 @@ class CompileEngine:
             if self.this_fun_type == "constructor":
                 self.vm_writer.push(POINTER, 0)
             elif self.this_fun_type == "method":
-                self.vm_writer.push(ARG, 0)
+                self.vm_writer.push(POINTER, 0)  # TODO ARG need
 
             num_arg = self.compile_expression_list(level + 1)
             if self.this_fun_type != "function":
@@ -353,11 +360,11 @@ class CompileEngine:
             # todO
         elif token.value == ".":
             fun_name = self.tokenizer.peek_next_token().value
-            self.push_object(fun_name)
+            self.push_object(s_name)
             self.write_next_token(level + 1)  # fun name
             self.write_next_token(level + 1)  # (
             num_arg = self.compile_expression_list(level + 1)
-            print(num_arg)
+            # print(s_name, fun_name, num_arg)
             self.call(s_name, fun_name, num_arg)
 
         self.write_next_token(level + 1)  # )
@@ -385,12 +392,13 @@ class CompileEngine:
             if token.value == "null" or token.value == 'false':
                 self.vm_writer.push(CONST, 0)
             elif token.value == "true":
-                self.vm_writer.push(CONST, 1)
-                self.vm_writer.arithmetic("!")
+                self.vm_writer.push(CONST, 0)
+                self.vm_writer.arithmetic("~")
             elif token.value == "this":
                 self.vm_writer.push(POINTER, 0)
         elif token.category == STRING_CONSTANT:
-            string = self.tokenizer.peek_next_token().value
+            string = token.value
+            print(string)
             self.vm_writer.push(CONST, len(string))
             self.vm_writer.call("String.new", 1)
             for ch in string:
@@ -404,7 +412,7 @@ class CompileEngine:
             self.write_infile(get_line_tags(token), level + 1)
         elif token.category == SYMBOL:
             if token.additional_info == UNARY_OPERATOR:
-                operator = self.tokenizer.peek_next_token().value
+                operator = token.value
 
                 self.write_infile(get_line_tags(token), level + 1)
                 token = self.tokenizer.next_token()
@@ -496,7 +504,7 @@ class CompileEngine:
             if operation == "*":
                 self.vm_writer.call("Math.multiply", 2)
             elif operation == "/":
-                self.vm_writer.call("Math.devide", 2)
+                self.vm_writer.call("Math.divide", 2)
             else:
                 self.vm_writer.arithmetic(operation)
 
@@ -525,10 +533,12 @@ class CompileEngine:
     def handle_arr(self):
         self.vm_writer.pop(TEMP, 0)
         self.vm_writer.pop(POINTER, 1)
-        self.vm_writer.pop(TEMP, 0)
+        self.vm_writer.push(TEMP, 0)
         self.vm_writer.pop(THAT, 0)
 
     def push_object(self, name):
+        # print("push object ", name)
+
         if self.symbol_table.kind_of(name) != NONE_KIND:
             self.vm_writer.push(LOCAL, self.symbol_table.index_of(name))
         else:
@@ -538,9 +548,9 @@ class CompileEngine:
             self.symbol_table.start_sub()
 
     def call(self, s_name, fun_name, num_args):
-        print(s_name, fun_name, num_args)
+        # print(s_name, fun_name, num_args)
         if self.symbol_table.kind_of(s_name) != NONE_KIND:
-            self.vm_writer.call(self.symbol_table.type_of(fun_name), num_args + 1)
+            self.vm_writer.call(f"{self.symbol_table.type_of(s_name)}.{fun_name}", num_args + 1)
         else:
             self.symbol_table.end_sub_routine()
             if self.symbol_table.kind_of(s_name) != NONE_KIND:

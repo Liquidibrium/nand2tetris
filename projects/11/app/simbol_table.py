@@ -13,13 +13,16 @@ class Symbol:
         self.running_index = running_index
         # self.sub_route = False
 
+    def __str__(self):
+        return f"s_name: {self.name}| type: {self.type}| kind: {self.kind}| index: {self.running_index}"
+
 
 class SymbolTable:
 
     def __init__(self):
         self.class_table: dict[str: Symbol] = {}
         self.func_table: dict[str: Symbol] = {}
-        self.table = self.func_table
+        self.table = self.class_table
         self.counter = {
             STATIC_KIND: 0,
             FIELD_KIND: 0,
@@ -59,3 +62,13 @@ class SymbolTable:
 
     def end_sub_routine(self):
         self.table = self.class_table
+
+    def __str__(self):
+        string = " func_table: \n"
+        for val in self.func_table.values():
+            string += str(val) + "\n"
+        string += " class_table: \n"
+        print(len(self.class_table))
+        for val in self.class_table.values():
+            string += str(val) + "\n"
+        return string
