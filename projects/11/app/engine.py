@@ -357,6 +357,7 @@ class CompileEngine:
             self.write_next_token(level + 1)  # fun name
             self.write_next_token(level + 1)  # (
             num_arg = self.compile_expression_list(level + 1)
+            print(num_arg)
             self.call(s_name, fun_name, num_arg)
 
         self.write_next_token(level + 1)  # )
@@ -510,7 +511,7 @@ class CompileEngine:
         token = self.tokenizer.next_token()
         self.compile_expression(token, level + 1)
         token = self.tokenizer.peek_next_token()
-        num_args = 0
+        num_args = 1
         while token.value == ",":
             token = self.tokenizer.next_token()
             self.write_infile(get_line_tags(token), level)  # ,
@@ -537,6 +538,7 @@ class CompileEngine:
             self.symbol_table.start_sub()
 
     def call(self, s_name, fun_name, num_args):
+        print(s_name, fun_name, num_args)
         if self.symbol_table.kind_of(s_name) != NONE_KIND:
             self.vm_writer.call(self.symbol_table.type_of(fun_name), num_args + 1)
         else:
