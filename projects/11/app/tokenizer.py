@@ -102,16 +102,8 @@ class Tokenizer:
                         string_const = True
 
     def __get_tokens(self, word: str) -> None:
-        # if not word:
-        #     return'
         additional = SYMBOLS.get(word, None)
         if additional:
-            # if word == ">":
-            #     word = "&gt;"
-            # elif word == "<":
-            #     word = "&lt;"
-            # elif word == "&":
-            #     word = "&amp;"
             self.tokens.append(Token(word, SYMBOL, additional))
             return
 
@@ -143,6 +135,4 @@ class Tokenizer:
         return self.tokens.popleft()
 
     def peek_next_token(self) -> Token:
-        # tkn = self.tokens.popleft()
-        # self.tokens.appendleft(tkn)
         return self.tokens[0]

@@ -35,34 +35,33 @@ arith_dict = {
 
 
 class VMWriter:
-
     def __init__(self, vm_file: TextIO, class_name: str):
         self.vm_file = vm_file
         self.class_name = class_name
 
-    def push(self, segment: str, index: int):
+    def push(self, segment: str, index: int) -> None:
         self.vm_file.write(f"push {segment} {index}\n")
 
-    def pop(self, segment: str, index: int):
+    def pop(self, segment: str, index: int) -> None:
         self.vm_file.write(f"pop {segment} {index}\n")
 
-    def arithmetic(self, command):
+    def arithmetic(self, command: str) -> None:
         self.vm_file.write(f"{arith_dict[command]}\n")
 
-    def label(self, label: str):
+    def label(self, label: str) -> None:
         self.vm_file.write(f"label {label}\n")
 
-    def goto(self, label: str):
+    def goto(self, label: str) -> None:
         self.vm_file.write(f"goto {label}\n")
 
-    def w_if(self, label: str):
+    def w_if(self, label: str) -> None:
         self.vm_file.write(f"if-goto {label}\n")
 
-    def call(self, name: str, num_args: int):
+    def call(self, name: str, num_args: int) -> None:
         self.vm_file.write(f"call {name} {num_args}\n")
 
-    def function(self, name: str, num_locals: int):
+    def function(self, name: str, num_locals: int) -> None:
         self.vm_file.write(f"function {self.class_name}.{name} {num_locals}\n")
 
-    def w_return(self):
-        self.vm_file.write(f"return\n")
+    def w_return(self) -> None:
+        self.vm_file.write("return\n")

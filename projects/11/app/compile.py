@@ -14,7 +14,9 @@ VM_FILE_EXT = ".vm"
 def compile_one_file(path_to_jack_file: str) -> None:
     path_to_vm_file = path_to_jack_file.replace(JACK_FILE_EXT, VM_FILE_EXT, -1)
     file_name = os.path.basename(path_to_vm_file).split(VM_FILE_EXT)[0]
-    with open(path_to_jack_file, "r") as jack_file, open(path_to_vm_file, "w") as vm_file:
+    with open(path_to_jack_file, "r") as jack_file, open(
+            path_to_vm_file, "w"
+    ) as vm_file:
         tokenizer = Tokenizer(jack_file)
         tokenizer.tokenize()
         compiler = CompileEngine(tokenizer, vm_file, file_name)

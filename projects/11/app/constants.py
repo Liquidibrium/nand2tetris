@@ -19,14 +19,10 @@ ONE_LINE_COMMENT = "//"
 MULTI_LINE_COMMENT_STARTS = "/*"
 MULTI_LINE_COMMENT_ENDS = "*/"
 SPACE = " "
+STATEMENTS = (LET_TAG_NAME, IF_TAG_NAME, WHILE_TAG_NAME, DO_TAG_NAME, RETURN_TAG_NAME)
 
 PRIMITIVE_TYPE = "type"
 ELSE = "else "
-
-
-
-
-
 
 KEYWORDS = {
     "class": CLASS_TAG_NAME,
@@ -81,3 +77,21 @@ SYMBOLS = {
     "-": UNARY_OPERATOR,
     "~": UNARY_OPERATOR,
 }
+
+CONSTRUCTOR = "constructor"
+FUNCTION = "function"
+METHOD = "method"
+TRUE = "true"
+FALSE = "false"
+NULL = "null"
+
+STATIC_KIND = "static"
+FIELD_KIND = "field"
+ARG_KIND = "arg"
+VAR_KIND = "var"
+NONE_KIND = "NONE"
+
+IF_FALSE = "IF_FALSE"
+IF_END = "IF_END"
+WHILE_EXP = "WHILE_EXP"
+WHILE_END = "WHILE_END"
