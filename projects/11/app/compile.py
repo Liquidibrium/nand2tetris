@@ -38,7 +38,6 @@ def compile(jack_file_or_directory_name: str) -> None:
         compilers.append(worker)
         i += 1
         # if i == 2:
-            # break
         # break
 
     for compiler in compilers:

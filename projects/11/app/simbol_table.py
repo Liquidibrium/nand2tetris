@@ -57,7 +57,7 @@ class SymbolTable:
     def type_of(self, name: str):
         return self.table[name].type
 
-    def index_of(self, name: str):
+    def index_of(self, name: str) -> int:
         return self.table[name].running_index
 
     def end_sub_routine(self):

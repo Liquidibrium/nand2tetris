@@ -57,11 +57,11 @@ push constant 0
 call Memory.poke 2
 pop temp 0
 label IF_END2
-goto IF_END2
+goto IF_END3
 label IF_FALSE1
 push constant 0
 pop local 2
-label IF_END2
+label IF_END3
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0
@@ -71,16 +71,16 @@ push argument 0
 push constant 0
 eq
 not
-if-goto IF_FALSE3
+if-goto IF_FALSE5
 push constant 1
 return
-goto IF_END3
-label IF_FALSE3
+goto IF_END5
+label IF_FALSE5
 push argument 0
 push constant 2
 call Math.multiply 2
 return
-label IF_END3
+label IF_END5
 function Main.fillMemory 0
 label WHILE_EXP1
 push argument 1
