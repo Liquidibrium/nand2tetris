@@ -6,7 +6,7 @@ from app.parser import CompileEngine
 from app.tokenizer import Tokenizer
 
 JACK_FILE_EXT = ".jack"
-XML_FILE_EXT = "2.xml"
+XML_FILE_EXT = ".xml"
 
 
 def analyze_one_file(jack_file_name: str) -> None:
