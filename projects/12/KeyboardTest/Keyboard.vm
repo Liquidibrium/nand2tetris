@@ -20,8 +20,6 @@ goto WHILE_EXP0
 label WHILE_END0
 label WHILE_EXP1
 call Keyboard.keyPressed 0
-push constant 0
-eq
 not
 not
 if-goto WHILE_END1

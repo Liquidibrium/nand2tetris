@@ -21,22 +21,6 @@ class Math {
             let powers[i] = powers[i-1] + powers[i-1];
             let i = i + 1;
         }
-		// let powers[0] = 1;
-		// let powers[1] = 2;
-		// let powers[2] = 4;
-		// let powers[3] = 8;
-		// let powers[4] = 16;
-		// let powers[5] = 32;
-		// let powers[6] = 64;
-		// let powers[7] = 128;
-		// let powers[8] = 256;
-		// let powers[9] = 512;
-		// let powers[10] = 1024;
-		// let powers[11] = 2048;
-		// let powers[12] = 4096;
-		// let powers[13] = 8192;
-		// let powers[14] = 16384;
-		// let powers[15] = 32768;
 		return;
     }
 
@@ -59,7 +43,7 @@ class Math {
         let shiftedX = x;
         let i = 0;
         while (i < sizeOfInteger) {  
-            if ( ~((x & powers[i]) = 0)){
+            if ( ~((y & powers[i]) = 0)){
                 let sum = sum + shiftedX;
             }
             let shiftedX = shiftedX + shiftedX;
@@ -68,7 +52,8 @@ class Math {
         }
         return sum;
     }
-
+   
+     
     /** Returns the integer part of x/y.
      *  When a Jack compiler detects the multiplication operator '/' in the 
      *  program's code, it handles it by invoking this method. In other words,
@@ -76,28 +61,30 @@ class Math {
      */
     function int divide(int x, int y) {
         var int sign;
+        let sign = Math.xorSign(x,y);
         let x = Math.abs(x);
         let y = Math.abs(y);
-        let sign = Math.xorSign(x,y);
         if (sign < 0){
-            return -Math.devidePositiveNumbers(x,y);
+            return -Math.dividePositiveNumbers(x,y);
         }
-        return Math.devidePositiveNumbers(x,y);
+        return Math.dividePositiveNumbers(x,y);
     }
 
-    function int devidePositiveNumbers(int x,int y){
+    function int dividePositiveNumbers(int x,int y){
         var int q, double, mult; 
         if (x < y) {
             return 0;
         }
-        let q = Math.devidePositiveNumbers(x, Math.multiply(y,2));
+        let q = Math.dividePositiveNumbers(x, Math.multiply(y,2));
         let double = Math.multiply(q,2);
         let mult = Math.multiply(double,y);
-        if ( x - mult - y < 0){
+        if ( x - mult < y){
             return double;
         }
-        return double + 1;
+        return (double) + 1;
     }
+
+    
 
     function int xorSign(int a, int b){
         return ((a | b) & (~(a & b)));
@@ -107,12 +94,12 @@ class Math {
     /** Returns the integer part of the square root of x. */
     function int sqrt(int x) {
         var int y, j, square, next;
-        let j = Math.devidePositiveNumbers(sizeOfInteger,2);
+        let j = Math.dividePositiveNumbers(sizeOfInteger,2)-1;
         let y = 0;
         while(~(j < 0)){
             let next =  y + powers[j];
             let square = Math.multiply(next, next);
-            if (~(square > x ) ){
+            if ((~(square > x)) & (square > 0 )  ){
                 let y =next;
             } 
             let j = j -1;

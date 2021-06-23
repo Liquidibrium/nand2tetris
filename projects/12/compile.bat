@@ -14,3 +14,5 @@ copy Sys.jack .\SysTest
 start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\SysTest
 copy Screen.jack .\ScreenTest
 start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\ScreenTest
+copy Output.jack .\OutputTest
+start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\OutputTest
