@@ -1,18 +1,20 @@
 copy Array.jack .\ArrayTest
-start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\ArrayTest
+@start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\ArrayTest
 @REM start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\VMEmulator.bat .\ArrayTest\ArrayTest.tst
 
 copy Keyboard.jack .\KeyboardTest
-start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\KeyboardTest
+@start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\KeyboardTest
 copy Math.jack .\MathTest
-start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\MathTest
+@start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\MathTest
 copy Memory.jack .\MemoryTest
-start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\MemoryTest
+@start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\MemoryTest
+copy Memory.jack .\MemoryTest\MemoryDiag
+@start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\MemoryTest\MemoryDiag
 copy String.jack .\StringTest
-start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\StringTest
+@start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\StringTest
 copy Sys.jack .\SysTest
-start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\SysTest
+@start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\SysTest
 copy Screen.jack .\ScreenTest
-start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\ScreenTest
+@start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\ScreenTest
 copy Output.jack .\OutputTest
-start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\OutputTest
+@start /b C:\Users\vganjelashvili\Desktop\cs\nand2tetris\tools\JackCompiler.bat .\OutputTest

@@ -38,21 +38,21 @@ class Memory {
     function int alloc(int size) {
         var int currentAddress, mallocedBlockAddress;
         let currentAddress = listStartingAddress;
-
         while(~(currentAddress > listEndingAddress)) {
-            if (~(currentAddress[1] < size + 2)) {
-                let mallocedBlockAddress = currentAddress + currentAddress[1] - size;
-                let mallocedBlockAddress[1] = size;
-                let currentAddress[1] = currentAddress[1] - size - 2;
-                return mallocedBlockAddress;
-            }
-            let currentAddress = currentAddress[0]; // next 
-            if (~currentAddress[0]){
+            if (currentAddress = 0){
                 // error 
                 return -1;
             } 
+            if (~(currentAddress[1] < (size + 2))) {
+                let mallocedBlockAddress = (currentAddress + currentAddress[1]) - size;
+                let mallocedBlockAddress[1] = size;
+                let currentAddress[1] = (currentAddress[1] - size) - 2;
+                return mallocedBlockAddress;
+            }
+            let currentAddress = currentAddress[0]; // next 
+            
         }
-        return -1;
+        return -1; // error
     }
 
     /** De-allocates the given object (cast as an array) by making
