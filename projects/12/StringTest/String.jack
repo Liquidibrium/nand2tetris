@@ -18,7 +18,7 @@ class String {
      *  and initial length of 0. */
     constructor String new(int maxLength) {
         let currentLength = 0;
-        if (maxLength = 0){
+        if (maxLength = 0) {
           let  maxLength = 1;
         }
         let allocLength = maxLength;
@@ -68,7 +68,7 @@ class String {
     }
 
     function boolean isDigit(char ch) {
-        if((ch > 47) & (ch < 58 )){
+        if((ch > 47) & (ch < 58)){
             return true;
         }
         return false;
@@ -79,15 +79,15 @@ class String {
      *  until a non-digit character is detected. */
     method int intValue() {
         var int i, val, d;
-        var boolean sign;
+        var boolean positiveSign;
         if (currentLength = 0) {
             return 0;
         }
         let val = 0;
-        let sign = true;
+        let positiveSign = true;
         let i = 0;
         if (chars[i] = 45){ // '-'
-            let sign = false;
+            let positiveSign = false;
             let i = 1;
         }
         while ((i < currentLength) & String.isDigit(chars[i])) { //Todo index out of bound exception might happen 
@@ -95,7 +95,7 @@ class String {
             let val = val * 10 + d;
             let i = i + 1;
         }
-        if (sign){
+        if (positiveSign){
             return val;
         }    
         return -val;
@@ -109,7 +109,7 @@ class String {
     }
 
     method void intToString(int val){
-        var char c ;
+        var char c;
         var int quotient, remainder;
         if ( val < 0){
             do appendChar(45); // '-'

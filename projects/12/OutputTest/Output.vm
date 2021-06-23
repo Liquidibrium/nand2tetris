@@ -1521,8 +1521,10 @@ pop local 2
 push constant 1
 pop local 3
 label IF_END0
-push constant 352
 push static 3
+push constant 32
+call Math.multiply 2
+push constant 11
 call Math.multiply 2
 push static 2
 push constant 2

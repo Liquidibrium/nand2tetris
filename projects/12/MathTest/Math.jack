@@ -94,12 +94,12 @@ class Math {
     /** Returns the integer part of the square root of x. */
     function int sqrt(int x) {
         var int y, j, square, next;
-        let j = Math.dividePositiveNumbers(sizeOfInteger,2)-1;
+        let j = Math.dividePositiveNumbers(sizeOfInteger,2) - 1;
         let y = 0;
         while(~(j < 0)){
             let next =  y + powers[j];
             let square = Math.multiply(next, next);
-            if ((~(square > x)) & (square > 0 )  ){
+            if ((~(square > x)) & (square > 0)){
                 let y =next;
             } 
             let j = j -1;
@@ -123,7 +123,7 @@ class Math {
         return b;
     }
 
-    // function int shift(int x, ) {
+    // function int shift(int x) {
     //     return x + x ;
     // }
 }

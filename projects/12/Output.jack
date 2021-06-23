@@ -184,8 +184,8 @@ class Output {
     /** Moves the cursor to the j-th column of the i-th row,
      *  and erases the character displayed there. */
     function void moveCursor(int i, int j) {
-        do Output.advanceCursor(j,i);
-        do Output.printChar(32); // erase screan 
+        do Output.advanceCursor(j, i);
+        do Output.printChar(32); // erase last char  
         do Output.advanceCursor(j,i);
         return;
     }
@@ -204,16 +204,14 @@ class Output {
             let bitMask = ~255; // 1111 1111 0000 0000
             let mult = 1 ;
         }
-        let addr =  (352 * cursorY) + (cursorX / 2);
-
+        let addr =  (cursorY * 32 * 11) + (cursorX / 2);
         let i = 0;
         while( i < 11 ) {
-            do Memory.poke(screenAddress + addr, (Memory.peek(screenAddress + addr) & bitMask) | (mult * map[i]));
+            do Memory.poke(screenAddress + addr,
+                (Memory.peek(screenAddress + addr) & bitMask) | (mult * map[i]));
             let addr = addr + 32;
             let i = i + 1;
         }
-
-
         do Output.advanceCursor(cursorX+1,cursorY);
         return;
     }
@@ -243,7 +241,7 @@ class Output {
 
     /** Advances the cursor to the beginning of the next line. */
     function void println() {
-        let cursorY  = Output.mode(cursorY + 1,maxHeight);
+        let cursorY  = Output.mode(cursorY + 1, maxHeight);
         let cursorX = 0;
         return;
     }
@@ -254,7 +252,7 @@ class Output {
             if (cursorY = 0){
                 return;
             } else {
-                do Output.moveCursor(cursorY - 1,maxWidth -1);
+                do Output.moveCursor(cursorY - 1, maxWidth -1);
             }
         } else{
             do Output.moveCursor(cursorY,cursorX -1);
@@ -270,15 +268,6 @@ class Output {
             let cursorY = Output.mode(cursorY + 1,maxHeight);
         }
         return;
-
-        // let cursorX = cursorX + dx;
-        // let cursorY = cursorY + dy;
-        // if (cursorX < 1) {
-        //    let cursorX  = 0;
-        // }
-        // if (cursorY < 1) {
-        //    let cursorY  = 0;
-        // }    
 
         // let cursorX = Math.mode(cursorX, maxWidth);
         // let cursorY = Math.mode(cursorY, maxHeight);
