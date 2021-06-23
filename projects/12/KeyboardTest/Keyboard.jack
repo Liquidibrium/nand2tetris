@@ -48,7 +48,7 @@ class Keyboard {
         while( ch = 0){
             let ch = Keyboard.keyPressed();
         }
-        while(~(Keyboard.keyPressed())){}
+        while(~(Keyboard.keyPressed() = 0)){}
 
         do Output.printChar(ch);
         return ch;
@@ -64,19 +64,16 @@ class Keyboard {
         var char currentChar;
         let text = String.new(64); // length of screen 
         do Output.printString(message);
-        while (1) {
+        while (~(currentChar = 128)) {
             let currentChar = Keyboard.readChar();
-            if (currentChar = 128) { // New Line
-                do Output.println();
-                return text;
-            }  
             if (~(currentChar = 129)) { 
-                do Output.appendChar(currentChar);
+                do text.appendChar(currentChar);
             } else {// backspace
                 do text.eraseLastChar();
                 do Output.backSpace();
             }
         }
+        do Output.println();
         return text;
     }   
 
@@ -87,7 +84,7 @@ class Keyboard {
      * entered text is detected). Also handles user backspaces. 
      */
     function int readInt(String message) {
-        var int integer;
+        var String integer;
         let integer = Keyboard.readLine(message);
         return integer.intValue();
     }
