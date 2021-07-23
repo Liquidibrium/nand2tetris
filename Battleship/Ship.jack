@@ -1,0 +1,23 @@
+class Ship {
+    field Point from,to;
+    constructor Ship new(Point fromPoint, Point toPoint) {
+        let from = fromPoint;
+        let to = toPoint;
+        return this;
+    }
+
+    method Point getFrom(){
+        return from;
+    }
+    
+    method Point getTo(){
+        return to;
+    }
+    
+    method void dispose() {
+        do from.dispose();
+        do to.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+}

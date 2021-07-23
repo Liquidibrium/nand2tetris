@@ -1,0 +1,63 @@
+class Grid {
+    
+    field int width, height;
+    field Array grid;
+    field bool disposeNeeded;
+    
+    constructor Grid new(int w, int h) {
+        if (w < 0) {
+           let  w = 1;
+        }
+
+        if (h < 0) {
+           let  h = 1;
+        }
+
+        // let disposeNeeded = needDispose;
+        let width = w;
+        let height = h;
+        let grid = Array.new(width*height);
+        return this;
+    }   
+
+   
+    method bool inBounds(int x, int y){
+        return (x > -1) & (y > -1) & (x < width) & (y < height); 
+    }
+
+    method String get(int x, int y) {
+        if (inBounds(x,y)){
+            return grid[(x * height) + y];
+        }
+        do Output.printString("ERROR GRID GET");
+        return null;
+    }
+
+    method void set(Strign elem, int x, int y) {
+        if (inBounds(x,y)){
+            let grid[(x * height) + y] = elem;
+            return;
+        }
+        do Output.printString("ERROR GRID SET");
+        return;
+    }
+    
+    
+    method void dispose() {
+        var int i;
+        var Strign elem;
+        var int numElems;
+        let numElems = width * height;
+        // if (disposeNeeded) {
+        //     let i = 0;
+        //     while (i < numElems) {
+        //         let elem = grid[i];
+        //         do elem.dispose();
+        //         let i = i + 1;
+        //     }
+        // } 
+        do grid.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+}

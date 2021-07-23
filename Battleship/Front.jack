@@ -1,0 +1,297 @@
+// temp 
+class Front {
+    static int memAddress;
+
+function void ShipPointWithX(int location) {
+	let memAddress = 16384+location;
+	do Memory.poke(memAddress+0, -1);
+	do Memory.poke(memAddress+32, -16381);
+	do Memory.poke(memAddress+64, -16387);
+	do Memory.poke(memAddress+96, -20467);
+	do Memory.poke(memAddress+128, -20491);
+	do Memory.poke(memAddress+160, -21451);
+	do Memory.poke(memAddress+192, -21547);
+	do Memory.poke(memAddress+224, -21547);
+	do Memory.poke(memAddress+256, -21547);
+	do Memory.poke(memAddress+288, -21547);
+	do Memory.poke(memAddress+320, -21451);
+	do Memory.poke(memAddress+352, -20491);
+	do Memory.poke(memAddress+384, -20467);
+	do Memory.poke(memAddress+416, -16387);
+	do Memory.poke(memAddress+448, -16381);
+	do Memory.poke(memAddress+480, -1);
+	return;
+}
+    function void aliveShipPoint(int location) {
+        let memAddress = 16384+location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -32767);
+        do Memory.poke(memAddress+64, -16387);
+        do Memory.poke(memAddress+96, -24571);
+        do Memory.poke(memAddress+128, -20491);
+        do Memory.poke(memAddress+160, -22123);
+        do Memory.poke(memAddress+192, -21547);
+        do Memory.poke(memAddress+224, -20491);
+        do Memory.poke(memAddress+256, -20491);
+        do Memory.poke(memAddress+288, -21547);
+        do Memory.poke(memAddress+320, -22123);
+        do Memory.poke(memAddress+352, -20491);
+        do Memory.poke(memAddress+384, -24571);
+        do Memory.poke(memAddress+416, -16387);
+        do Memory.poke(memAddress+448, -32767);
+        do Memory.poke(memAddress+480, -1);
+        return;
+    }
+
+    function void aliveShip(int location) {
+        let memAddress = 16384+location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -32767);
+        do Memory.poke(memAddress+64, -16387);
+        do Memory.poke(memAddress+96, -24571);
+        do Memory.poke(memAddress+128, -20491);
+        do Memory.poke(memAddress+160, -22507);
+        do Memory.poke(memAddress+192, -22507);
+        do Memory.poke(memAddress+224, -22507);
+        do Memory.poke(memAddress+256, -22507);
+        do Memory.poke(memAddress+288, -22507);
+        do Memory.poke(memAddress+320, -22507);
+        do Memory.poke(memAddress+352, -20491);
+        do Memory.poke(memAddress+384, -24571);
+        do Memory.poke(memAddress+416, -16387);
+        do Memory.poke(memAddress+448, -32767);
+        do Memory.poke(memAddress+480, -1);
+        return;
+    }
+
+   function void smallCube(int location) {
+        let memAddress = 16384+location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -32767);
+        do Memory.poke(memAddress+64, -32767);
+        do Memory.poke(memAddress+96, -24583);
+        do Memory.poke(memAddress+128, -24583);
+        do Memory.poke(memAddress+160, -24583);
+        do Memory.poke(memAddress+192, -24583);
+        do Memory.poke(memAddress+224, -24583);
+        do Memory.poke(memAddress+256, -24583);
+        do Memory.poke(memAddress+288, -24583);
+        do Memory.poke(memAddress+320, -24583);
+        do Memory.poke(memAddress+352, -24583);
+        do Memory.poke(memAddress+384, -24583);
+        do Memory.poke(memAddress+416, -32767);
+        do Memory.poke(memAddress+448, -32767);
+        do Memory.poke(memAddress+480, -1);
+        return;
+    }
+
+    function void smallCubeWithPoint(int location) {
+       let memAddress = 16384+location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -32767);
+        do Memory.poke(memAddress+64, -32767);
+        do Memory.poke(memAddress+96, -24583);
+        do Memory.poke(memAddress+128, -24583);
+        do Memory.poke(memAddress+160, -24967);
+        do Memory.poke(memAddress+192, -25543);
+        do Memory.poke(memAddress+224, -26599);
+        do Memory.poke(memAddress+256, -26599);
+        do Memory.poke(memAddress+288, -25543);
+        do Memory.poke(memAddress+320, -24967);
+        do Memory.poke(memAddress+352, -24583);
+        do Memory.poke(memAddress+384, -24583);
+        do Memory.poke(memAddress+416, -32767);
+        do Memory.poke(memAddress+448, -32767);
+        do Memory.poke(memAddress+480, -1);
+        return;
+    }
+
+    function void whitePoint(int location) {
+        let memAddress = 16384+location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -1);
+        do Memory.poke(memAddress+64, -1);
+        do Memory.poke(memAddress+96, -1);
+        do Memory.poke(memAddress+128, -385);
+        do Memory.poke(memAddress+160, -961);
+        do Memory.poke(memAddress+192, -2017);
+        do Memory.poke(memAddress+224, -4081);
+        do Memory.poke(memAddress+256, -4081);
+        do Memory.poke(memAddress+288, -2017);
+        do Memory.poke(memAddress+320, -961);
+        do Memory.poke(memAddress+352, -385);
+        do Memory.poke(memAddress+384, -1);
+        do Memory.poke(memAddress+416, -1);
+        do Memory.poke(memAddress+448, -1);
+        do Memory.poke(memAddress+480, -1);
+        return;
+    }
+
+    function void smallPoint(int location) {
+        let memAddress = 16384+location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -32767);
+        do Memory.poke(memAddress+64, -32767);
+        do Memory.poke(memAddress+96, -32767);
+        do Memory.poke(memAddress+128, -32767);
+        do Memory.poke(memAddress+160, -32383);
+        do Memory.poke(memAddress+192, -31807);
+        do Memory.poke(memAddress+224, -30751);
+        do Memory.poke(memAddress+256, -30751);
+        do Memory.poke(memAddress+288, -31807);
+        do Memory.poke(memAddress+320, -32383);
+        do Memory.poke(memAddress+352, -32767);
+        do Memory.poke(memAddress+384, -32767);
+        do Memory.poke(memAddress+416, -32767);
+        do Memory.poke(memAddress+448, -32767);
+        do Memory.poke(memAddress+480, -1);
+        return;
+    }
+
+    function void point(int location) {
+        let memAddress = 16384+location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -32767);
+        do Memory.poke(memAddress+64, -32767);
+        do Memory.poke(memAddress+96, -32767);
+        do Memory.poke(memAddress+128, -32383);
+        do Memory.poke(memAddress+160, -31807);
+        do Memory.poke(memAddress+192, -30751);
+        do Memory.poke(memAddress+224, -28687);
+        do Memory.poke(memAddress+256, -28687);
+        do Memory.poke(memAddress+288, -30751);
+        do Memory.poke(memAddress+320, -31807);
+        do Memory.poke(memAddress+352, -32383);
+        do Memory.poke(memAddress+384, -32767);
+        do Memory.poke(memAddress+416, -32767);
+        do Memory.poke(memAddress+448, -32767);
+        do Memory.poke(memAddress+480, -1);
+        return;
+    }
+
+
+    function void drawCell(int location) {
+        let memAddress = 16384+location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -32767);
+        do Memory.poke(memAddress+64, -32767);
+        do Memory.poke(memAddress+96, -32767);
+        do Memory.poke(memAddress+128, -32767);
+        do Memory.poke(memAddress+160, -32767);
+        do Memory.poke(memAddress+192, -32767);
+        do Memory.poke(memAddress+224, -32767);
+        do Memory.poke(memAddress+256, -32767);
+        do Memory.poke(memAddress+288, -32767);
+        do Memory.poke(memAddress+320, -32767);
+        do Memory.poke(memAddress+352, -32767);
+        do Memory.poke(memAddress+384, -32767);
+        do Memory.poke(memAddress+416, -32767);
+        do Memory.poke(memAddress+448, -32767);
+        do Memory.poke(memAddress+480, -1);
+        return;
+    }
+
+    function void drawX(int location) {
+        let memAddress = 16384+location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -16381);
+        do Memory.poke(memAddress+64, -24571);
+        do Memory.poke(memAddress+96, -28663);
+        do Memory.poke(memAddress+128, -30703);
+        do Memory.poke(memAddress+160, -31711);
+        do Memory.poke(memAddress+192, -32191);
+        do Memory.poke(memAddress+224, -32383);
+        do Memory.poke(memAddress+256, -32383);
+        do Memory.poke(memAddress+288, -32191);
+        do Memory.poke(memAddress+320, -31711);
+        do Memory.poke(memAddress+352, -30703);
+        do Memory.poke(memAddress+384, -28663);
+        do Memory.poke(memAddress+416, -24571);
+        do Memory.poke(memAddress+448, -16381);
+        do Memory.poke(memAddress+480, -1);
+        return;
+    }
+    
+    function void drawCircle(int location) {
+        let memAddress = 16384+location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -31807);
+        do Memory.poke(memAddress+64, -29647);
+        do Memory.poke(memAddress+96, -26599);
+        do Memory.poke(memAddress+128, -20467);
+        do Memory.poke(memAddress+160, -24571);
+        do Memory.poke(memAddress+192, -16381);
+        do Memory.poke(memAddress+224, -16381);
+        do Memory.poke(memAddress+256, -16381);
+        do Memory.poke(memAddress+288, -16381);
+        do Memory.poke(memAddress+320, -24571);
+        do Memory.poke(memAddress+352, -20467);
+        do Memory.poke(memAddress+384, -26599);
+        do Memory.poke(memAddress+416, -29647);
+        do Memory.poke(memAddress+448, -31807);
+        do Memory.poke(memAddress+480, -1);
+        return;
+    }
+
+    function void drawCircleWithPoint(int location) {
+        let memAddress = 16384+location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -31807);
+        do Memory.poke(memAddress+64, -29647);
+        do Memory.poke(memAddress+96, -26599);
+        do Memory.poke(memAddress+128, -20467);
+        do Memory.poke(memAddress+160, -24187);
+        do Memory.poke(memAddress+192, -15421);
+        do Memory.poke(memAddress+224, -14365);
+        do Memory.poke(memAddress+256, -14365);
+        do Memory.poke(memAddress+288, -15421);
+        do Memory.poke(memAddress+320, -24187);
+        do Memory.poke(memAddress+352, -20467);
+        do Memory.poke(memAddress+384, -26599);
+        do Memory.poke(memAddress+416, -29647);
+        do Memory.poke(memAddress+448, -31807);
+        do Memory.poke(memAddress+480, -1);
+        return;
+    }
+
+    function void drawXPoint(int location) {
+        let memAddress = 16384+location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -16381);
+        do Memory.poke(memAddress+64, -24571);
+        do Memory.poke(memAddress+96, -28663);
+        do Memory.poke(memAddress+128, -30703);
+        do Memory.poke(memAddress+160, -31327);
+        do Memory.poke(memAddress+192, -31807);
+        do Memory.poke(memAddress+224, -30751);
+        do Memory.poke(memAddress+256, -30751);
+        do Memory.poke(memAddress+288, -31807);
+        do Memory.poke(memAddress+320, -31327);
+        do Memory.poke(memAddress+352, -30703);
+        do Memory.poke(memAddress+384, -28663);
+        do Memory.poke(memAddress+416, -24571);
+        do Memory.poke(memAddress+448, -16381);
+        do Memory.poke(memAddress+480, -1);
+        return;
+    }
+    function void drawBlack(int location) {
+        let memAddress = 16384+location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -1);
+        do Memory.poke(memAddress+64, -1);
+        do Memory.poke(memAddress+96, -1);
+        do Memory.poke(memAddress+128, -1);
+        do Memory.poke(memAddress+160, -1);
+        do Memory.poke(memAddress+192, -1);
+        do Memory.poke(memAddress+224, -1);
+        do Memory.poke(memAddress+256, -1);
+        do Memory.poke(memAddress+288, -1);
+        do Memory.poke(memAddress+320, -1);
+        do Memory.poke(memAddress+352, -1);
+        do Memory.poke(memAddress+384, -1);
+        do Memory.poke(memAddress+416, -1);
+        do Memory.poke(memAddress+448, -1);
+        do Memory.poke(memAddress+480, -1);
+        return;
+    }
+}

@@ -1,0 +1,7 @@
+class PlayerBoard {
+
+    constructor PlayerBoard new(){
+        return this;
+    }
+
+}

@@ -1,0 +1,136 @@
+class BattleShipGame {
+    field int location,x,y,dx, dy;
+    field Board botBoard;
+    field Board playerBoard;
+    field bool turn;
+
+    constructor BattleShipGame new() {
+        let dx = 0;
+        let dy = 0;
+        
+        let x = 0;
+        let y = 0;
+        let location = 1024+4;
+        let playerBoard = Board.new(location, true);
+        let botBoard = Board.new(location + 10 + 4, false);
+        
+        let turn = true; // players Turn
+        do init();
+        return this;
+    }
+
+    method void init(){
+        do Screen.clearScreen();
+        do playerBoard.drawBoard();
+        do botBoard.drawBoard();
+        // do drawBoard(1025);
+        return;
+    }
+    
+    method bool inBounds(int x, int y){
+        return (x > -1) & (y > -1) & (x < 10) & (y < 10); 
+    }
+
+
+    method void moveCell(int key) {
+        return;
+    }
+    
+    method void selectCell() {
+        return;
+    }
+
+    method void shootCell() {
+        return;
+    }
+    method bool isValidGrid(){
+        return true;
+    }
+
+
+    method void getDirections(int key) {
+        let dx = 0;
+        let dy = 0;
+        if (key = 131) { // up arrow
+            let dx = 0;
+            let dy = -1;
+        }   
+        if (key = 133) { // down arrow
+            let dx = 0;
+            let dy = 1;
+        }   
+        if (key = 130) { // left arrow
+            let dx = -1;
+            let dy = 0;
+        }   
+        if (key = 132) { // right arrow
+            let dx = 1;
+            let dy = 0;       
+        }
+        
+        if (inBounds(x+dx,y+dy)) {
+            do playerBoard.drawGridCell(x,y);
+            let x = x + dx;
+            let y = y + dy;
+            do playerBoard.drawCoursoreCell(x,y);
+        }
+        return;   
+    }
+
+    method void translateKB(int key) {
+        
+        
+        if (key = 83) { // s stop
+            do isValidGrid();
+            return;
+        }
+        if (key = 128) { // enter
+            // update board 
+            do playerBoard.placeShip(x,y);
+        }
+        do getDirections(key);
+
+        return;
+    }
+
+
+    method void moveCoursor(){
+        var int key;
+        do playerBoard.drawCoursoreCell(x,y);
+        while (true) {
+            while (key = 0) {  
+                let key = Keyboard.keyPressed();
+                do translateKB(key);
+            }
+
+            
+            while (~(key = 0)) {  
+                let key = Keyboard.keyPressed();
+                do translateKB(key);
+                do Sys.wait(10);
+            }
+
+        }
+        return; 
+    }
+
+    method void run() {
+        do moveCoursor();
+        return;
+    }
+
+
+
+
+    /** Disposes this game. */
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+
+}
+
+
+
+

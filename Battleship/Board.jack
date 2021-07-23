@@ -1,0 +1,109 @@
+
+class Board {
+    
+    field bool player;
+    field Grid grid;
+    field int loc;
+
+    constructor Board new(int location,bool isPlayer) {
+        let loc = location;
+        let player = isPlayer;
+        let grid = Grid.new(10,10);
+        return this;
+    }
+    
+
+    method void drawBoard() {
+        var int i, j;
+        let i = 0;
+        while (i < 10) {
+            let j = 0;
+            while (j < 10) {
+                do drawGridCell(i,j);
+                let j = j + 1;   
+            }
+            let i = i + 1;   
+        }
+        return;    
+    }
+
+    method bool inBounds(int x, int y){
+        return (x > -1) & (y > -1) & (x < 10) & (y < 10); 
+    }
+
+    method void drawGridCell(int i, int j) {
+        var int pos ;
+        if (~inBounds(i,j)) {
+            return;
+        }
+        let pos = loc + i + (j*512);
+        
+        if (grid.get(i,j) = 0) { // just cell
+            do Front.drawCell(pos);
+        }
+
+        if (grid.get(i,j) = 1) { // alive ship 
+            if(player) {
+                do Front.drawCircle(pos);
+            }
+            if(~player) { 
+                do Front.drawCell(pos);
+            }
+        }
+
+        if (grid.get(i,j) = 2) { // missed cell
+            do Front.drawX(pos);
+        }
+        if (grid.get(i,j) = 3) { // damaged ship
+            do Front.smallCube(pos);
+        }
+        if (grid.get(i,j) = 4) { // drown ship
+            do Front.drawBlack(pos);
+        }
+        return;
+    }
+
+      method void drawCoursoreCell(int i, int j) {
+        var int pos ;
+        if (~inBounds(i,j)) {
+            return;
+        }
+        let pos = loc + i + (j*512);
+        
+        if (grid.get(i,j) = 0) { // just cell with point
+            do Front.smallPoint(pos);
+        }
+
+        if (grid.get(i,j) = 1) { // alive ship 
+            if(player) {
+                do Front.drawCircleWithPoint(pos);
+            }
+            if(~player) { 
+                do Front.smallPoint(pos);
+            }
+        }
+
+        if (grid.get(i,j) = 2) { // missed cell
+            do Front.drawXPoint(pos);
+        }
+        if (grid.get(i,j) = 3) { // damaged ship
+            do Front.smallCubeWithPoint(pos);
+        }
+        if (grid.get(i,j) = 4) { // drown ship
+            do Front.whitePoint(pos);
+        }
+        return;
+    }
+
+    method void placeShip(int i,int j){
+        do grid.set(1,i,j);
+        do Front.drawCircleWithPoint(loc + i + (j*512));
+        return;
+    }
+
+    method void dispose() {
+        do grid.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+}

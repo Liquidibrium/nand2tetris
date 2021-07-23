@@ -1,0 +1,95 @@
+class ArrayList {
+    
+    field int allocLen, logLen; // allocated length, logical length 
+    field Array elems;
+    field bool disposeNeeded;
+
+    constructor ArrayList new(int initialSize, bool needDispose) {
+        if (initialSize < 0) {
+           let initialSize = 10;
+        }
+        let allocLen = initialSize;
+        let logLen = 0;
+        let disposeNeeded = needDispose;
+        let elems = Array.new(allocLen);
+        return this;
+    }
+    
+
+    // string means pointer only 
+    method void add(String data) {
+        var Array newElems;
+        var int i;
+
+        if (logLen = allocLen) {
+            let newElems = Array.new(2 * allocLen);
+
+            let i = 0;
+            while (i < logLen) {
+                let newElems[i] = elems[i];
+                let i = i + 1;
+            }
+            
+            do elems.dispose();
+            let allocLen = 2 * allocLen;
+            let elems = newElems;
+        }
+ 
+        let elems[logLen] = data;
+        let logLen = logLen + 1;
+        return;
+    }
+
+    // method void insertAt(String data, int index) {
+    //     if (index == logLen) { 
+    //         do add(data);
+    //         return;
+    //     }
+    //     // if (index > allocLen)
+    //     let arr[index] = data;
+    //     return;
+    // }
+
+    method String get(int index) {
+        if (index < logLen | index > 0){
+            return elems[index];
+        }
+        do Output.printString("ARRAY ERROR GET");
+        return null;
+    }
+
+    method void pop() {
+        var String elem;
+        let logLen = logLen - 1;
+        if (disposeNeeded) {
+            let elem = elems[logLen];
+            do elem.dispose();
+        } 
+        return;
+    }
+
+    method int size(){
+        return logLen;
+    }
+
+    method int getcapacity() {
+        return allocLen;
+    }
+
+
+    method void dispose() {
+        var int i;
+        var String elem;
+        if (disposeNeeded) {
+            let i = 0;
+            while (i < logLen) {
+                let elem = elems[i];
+                do elem.dispose();
+                let i = i + 1;
+            }
+        } 
+        do elems.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+}

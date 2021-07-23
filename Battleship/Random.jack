@@ -1,0 +1,21 @@
+// The Linear Congruential Generator
+class Random {
+    static int randN;
+
+    function void init(int seed) {
+        let randN = seed;
+        return;
+    }
+
+    // random number in range [0;10)
+    function int nextInt() {
+        let randN = ((97 * randN) + 71) & 10;
+        return randN;
+    }
+
+    function Point gerRandomPoint(){
+        return Point.new(Random.nextInt(), Random.nextInt());        
+    }
+    
+
+}

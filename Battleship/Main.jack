@@ -1,0 +1,34 @@
+class Main {
+    function void main() {
+        var char key;  
+        var int seed;
+        var BattleShipGame game;
+        do Output.printString("press any key to start Game");
+        while (key = 0) {
+            let seed = seed + 1;
+            let key = Keyboard.keyPressed();
+        }
+        do Random.init(seed);
+        let game = BattleShipGame.new();
+        do game.run();
+        do game.dispose();
+
+        let key = 0;
+        let seed = 0;
+        while (true) {
+            while (~(key = 32)) { // space 
+                let key = Keyboard.keyPressed();
+            }
+ 
+            let game = BattleShipGame.new();
+            do game.run();
+            do game.dispose();
+            
+            while (~(key = 0)) {  
+                let key = Keyboard.keyPressed();
+            }
+
+        } 
+        return;
+    }
+}
