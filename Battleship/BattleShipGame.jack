@@ -19,9 +19,45 @@ class BattleShipGame {
         return this;
     }
 
+    method void initBot() {
+        // 5 4 3 2 2 1 1 
+        var int i;
+        let i = 5;
+        while(i > 0) {
+            do placeShipForBot(i);
+            let i = i - 1;
+        }
+        do placeShipForBot(1);
+        do placeShipForBot(2);
+        return;
+    }
+
+    method void placeShipForBot(int size) {
+        var Point randPoint;
+        var bool horizontal; 
+        while (true) {
+            let randPoint = Random.getPoint();
+            let horizontal = Random.getBool();
+            do StringUtils.toString(randPoint.getX());
+            do StringUtils.toString(randPoint.getY());
+             do StringUtils.toString(size);
+             do Output.println();
+            if(botBoard.placeShip(randPoint.getX(),randPoint.getY(),
+                        horizontal,size)){
+                do randPoint.dispose();
+                            return;
+                }
+            do randPoint.dispose();
+        }
+        return;
+    }
+
+    
+
     method void init(){
         do Screen.clearScreen();
         do playerBoard.drawBoard();
+        do initBot();
         do botBoard.drawBoard();
         // do drawBoard(1025);
         return;
@@ -41,14 +77,17 @@ class BattleShipGame {
     }
 
     method void shootCell() {
+        let turn = botBoard.shootCell(x,y);
+            // 
         return;
     }
+
     method bool isValidGrid(){
         return true;
     }
 
 
-    method void getDirections(int key) {
+    method void getDirections(Board board,int key) {
         let dx = 0;
         let dy = 0;
         if (key = 131) { // up arrow
@@ -69,53 +108,112 @@ class BattleShipGame {
         }
         
         if (inBounds(x+dx,y+dy)) {
-            do playerBoard.drawGridCell(x,y);
+            do board.drawGridCell(x,y);
             let x = x + dx;
             let y = y + dy;
-            do playerBoard.drawCoursoreCell(x,y);
+            do board.drawCoursoreCell(x,y);
         }
         return;   
     }
 
-    method void translateKB(int key) {
-        
-        
+    method bool translateKeyForPlayerBoard(int key) {
         if (key = 83) { // s stop
-            do isValidGrid();
-            return;
+            do playerBoard.drawGridCell(x,y);
+            if(isValidGrid()) {
+                return true;
+            }
+            do playerBoard.clearGrid();
+            do playerBoard.drawBoard();
         }
         if (key = 128) { // enter
             // update board 
-            do playerBoard.placeShip(x,y);
+            do playerBoard.placeShipCell(x,y);
         }
-        do getDirections(key);
-
-        return;
+        do getDirections(playerBoard, key);
+        return false;
     }
 
+    method bool translateKeyForBotBoard(int key) {
+        if (key = 83) { // s stop
+        }
+        if (key = 128) { // enter
+            do shootCell();
+            // update board 
+            // attack 
+            return true;
+        }   
+        do getDirections(botBoard, key);
+        return false;
+    }
 
-    method void moveCoursor(){
+    method bool makeMove(int key, bool placeShip) {
+        do Sys.wait(50);
+        if (placeShip) {
+            if(translateKeyForPlayerBoard(key)) {
+                return true;
+            }
+        }
+        if (~placeShip) {
+            if(translateKeyForBotBoard(key)) {
+                return true; 
+            }
+        }
+        return false;
+    }
+
+    method void moveCoursor(bool placeShip){
         var int key;
-        do playerBoard.drawCoursoreCell(x,y);
+        // do playerBoard.drawCoursoreCell(x,y);
         while (true) {
             while (key = 0) {  
                 let key = Keyboard.keyPressed();
-                do translateKB(key);
+                if(makeMove(key,placeShip)) {
+                    return;
+                }
             }
-
             
             while (~(key = 0)) {  
                 let key = Keyboard.keyPressed();
-                do translateKB(key);
-                do Sys.wait(10);
+                if(makeMove(key,placeShip)) {
+                    return;
+                }
             }
-
         }
         return; 
     }
 
+    method void placeShips() {
+        do moveCoursor(true);
+
+        return;
+    }
+    
+    method void startBattle() {
+        let x = 0;
+        let y = 0;
+        while (true) {
+            // if(playerBoard.getAliveShipNum() = 0){
+            //     do Output.printString("You Lose the Game");
+            //     return;
+            // }
+            if(botBoard.getAliveShipNum() = 0){
+                do Output.printString("You Won the Game");
+                return;
+            }
+            if (turn){
+                do moveCoursor(false);
+            }
+            if (~turn){
+                // bot shoot 
+                let turn = true;
+            }
+        }
+        return;
+    }
+
     method void run() {
-        do moveCoursor();
+        do placeShips();
+        do startBattle();
         return;
     }
 
@@ -124,6 +222,8 @@ class BattleShipGame {
 
     /** Disposes this game. */
     method void dispose() {
+        do botBoard.dispose();
+        do playerBoard.dispose();
         do Memory.deAlloc(this);
         return;
     }

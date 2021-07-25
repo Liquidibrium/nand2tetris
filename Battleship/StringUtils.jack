@@ -1,0 +1,12 @@
+class StringUtils {
+
+    function void toString(int i){
+        var String tmp; 
+        let tmp = String.new(20);
+        do tmp.setInt(i);
+        do Output.printString(tmp);
+        do tmp.dispose();
+        return;
+    }
+
+}

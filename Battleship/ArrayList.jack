@@ -40,15 +40,19 @@ class ArrayList {
         return;
     }
 
-    // method void insertAt(String data, int index) {
-    //     if (index == logLen) { 
-    //         do add(data);
-    //         return;
-    //     }
-    //     // if (index > allocLen)
-    //     let arr[index] = data;
-    //     return;
-    // }
+    method void changeAt(String data, int index) {
+        if (index = logLen) { 
+            do add(data);
+            return;
+        }
+        // if (index > allocLen)
+        let elems[index] = data;
+        return;
+    }
+
+    method bool removeAt(int index){
+        return false;
+    }
 
     method String get(int index) {
         if (index < logLen | index > 0){

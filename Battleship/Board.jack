@@ -3,12 +3,13 @@ class Board {
     
     field bool player;
     field Grid grid;
-    field int loc;
-
+    field int loc, countShips;
+    
     constructor Board new(int location,bool isPlayer) {
         let loc = location;
         let player = isPlayer;
         let grid = Grid.new(10,10);
+        let countShips = 0;
         return this;
     }
     
@@ -55,7 +56,7 @@ class Board {
             do Front.drawX(pos);
         }
         if (grid.get(i,j) = 3) { // damaged ship
-            do Front.smallCube(pos);
+            do Front.drawBlackCircle(pos);
         }
         if (grid.get(i,j) = 4) { // drown ship
             do Front.drawBlack(pos);
@@ -63,7 +64,258 @@ class Board {
         return;
     }
 
-      method void drawCoursoreCell(int i, int j) {
+    method bool checkIfBlownUp(int i,int j) {
+        var int di,dj;
+        var bool noBreak;
+        let di = 1;
+        let dj = 0;
+        let noBreak = true;
+        while(noBreak & inBounds(i+di,j+dj)) {
+            if (grid.get(i+di,j + dj) = 1) {
+                return false;
+            }
+            if(grid.get(i+di,j + dj) = 0){
+               let noBreak = false;
+            }
+            if(grid.get(i+di,j + dj) = 2){
+                let noBreak = false;
+            }
+            let di = di + 1;
+        }
+
+        let di = -1;
+        let dj = 0;
+        let noBreak = true;
+        while(noBreak & inBounds(i+di,j+dj)) {
+            if (grid.get(i+di,j + dj) = 1) {
+                return false;
+            }
+            if(grid.get(i+di,j + dj) = 0){
+                let noBreak = false;
+            }
+            if(grid.get(i+di,j + dj) = 2){
+                let noBreak = false;
+            }
+            let di = di - 1;
+        }
+         
+        let di = 0;
+        let dj = 1;
+        let noBreak = true;
+        while(noBreak & inBounds(i+di,j+dj)) {
+            if (grid.get(i+di,j + dj) = 1) {
+                return false;
+            }
+            if(grid.get(i+di,j + dj) = 0){
+                let noBreak = false;
+            }
+            if(grid.get(i+di,j + dj) = 2){
+                let noBreak = false;
+            }
+            let dj = dj + 1;
+        }
+
+        let di = 0;
+        let dj = -1;
+        let noBreak = true;
+        while(noBreak & inBounds(i+di,j+dj)) {
+            if (grid.get(i+di,j + dj) = 1) {
+                return false;
+            }
+            if(grid.get(i+di,j + dj) = 0){
+                let noBreak = false;
+            }
+            if(grid.get(i+di,j + dj) = 2){
+                let noBreak = false;
+            }
+            let dj = dj - 1;
+        }
+        return true;
+    }
+
+    method int getPosition(int i , int j){
+        return loc + i + (j*512);
+    }
+
+    method void blowUp(int i,int j) {
+        var int di,dj;
+        var bool noBreak;
+        do grid.set(4,i,j);
+        do Front.whitePoint(getPosition(i , j));
+
+        let di = 1;
+        let dj = 0;
+        let noBreak = true;
+        while(noBreak & inBounds(i+di,j+dj)) {
+            if (grid.get(i+di,j + dj) = 3) {
+                do grid.set(4,i + di, j + dj);
+                do Front.drawBlack(getPosition(i + di, j + dj));
+            }
+            if(grid.get(i+di,j + dj) = 0){
+                let noBreak = false;
+            }
+            if(grid.get(i+di,j + dj) = 2){
+                let noBreak = false;
+            }
+            let di = di + 1;
+        }
+
+        let di = -1;
+        let dj = 0;
+        let noBreak = true;
+        while(noBreak & inBounds(i+di,j+dj)) {
+            if (grid.get(i+di,j + dj) = 3) {
+                do grid.set(4,i + di, j + dj);
+                do Front.drawBlack(getPosition(i + di, j + dj));
+            }
+            if(grid.get(i+di,j + dj) = 0){
+                let noBreak = false;
+            }
+            if(grid.get(i+di,j + dj) = 2){
+                let noBreak = false;
+            }
+            let di = di - 1;
+        }
+         
+        let di = 0;
+        let dj = 1;
+        let noBreak = true;
+        while(noBreak & inBounds(i+di,j+dj)) {
+             if (grid.get(i+di,j + dj) = 3) {
+                do grid.set(4,i + di, j + dj);
+                do Front.drawBlack(getPosition(i + di, j + dj));
+            }
+            if(grid.get(i+di,j + dj) = 0){
+                let noBreak = false;
+            }
+            if(grid.get(i+di,j + dj) = 2){
+                let noBreak = false;
+            }
+            let dj = dj + 1;
+        }
+
+        let di = 0;
+        let dj = -1;
+        let noBreak = true;
+        while(noBreak & inBounds(i+di,j+dj)) {
+            if (grid.get(i+di,j + dj) = 3) {
+                do grid.set(4,i + di, j + dj);
+                do Front.drawBlack(getPosition(i + di, j + dj));
+            }
+            if(grid.get(i+di,j + dj) = 0){
+                let noBreak = false;
+            }
+            if(grid.get(i+di,j + dj) = 2){
+                let noBreak = false;
+            }
+            let dj = dj - 1;
+        }
+        return;
+    }
+
+    method bool shootCell(int i,int j) {
+        var int pos ;
+        if (~inBounds(i,j)) {
+            return true;
+        }
+        let pos = loc + i + (j*512);
+        if(grid.get(i,j) = 0) {
+            do grid.set(2,i,j);
+            do Front.drawXPoint(pos);
+            return false;
+        }
+
+        if(grid.get(i,j) = 1) {
+            do grid.set(3,i,j);
+            do Front.drawBlackCircleWithPoint(pos);
+            if (checkIfBlownUp(i,j)) {
+                let countShips = countShips - 1;
+                do blowUp(i,j);
+            }
+            // return true;
+        }
+
+        // if(grid.get(i,j) = 2) {
+        //     return true; 
+        // }
+        // if(grid.get(i,j) = 3) {
+        //     return true; 
+        // }
+        // if(grid.get(i,j) = 4) {
+        //     return true; 
+        // }
+        return true;
+    }
+
+    method bool placeShip(int x, int y, bool horizontal, int size) {
+        var int i,a,b;
+        if (horizontal) {
+            let i = x;
+            while ( i < ( x + size )) {
+                 if(~inBounds(i,y)) {
+                    return false;
+                 }
+                    let a = -1;
+                    while (a < 2 ) {
+                        let b = -1;
+                        while (b < 2 ) {
+                            if(inBounds(i+a,y+b)) {
+                                if(grid.get(i+a,y+b) = 1) {
+                                    return false;
+                                }
+                            }
+                            let b = b + 1;
+                        }
+                        let a = a + 1;
+                    }
+                
+                let i = i + 1;
+            }
+            let i = x;
+            while ( i <(x + size) ) {
+                do grid.set(1,i,y);
+                do drawGridCell(i,y);
+                let i = i + 1;
+            }
+        }
+
+        if (~horizontal) {
+            let i = y;
+            while ( i < (y + size) ) {
+                if(~inBounds(i,y)) {
+                    return false;
+                }
+                let a = -1;
+                while (a < 2 ) {
+                    let b = -1;
+                    while (b < 2 ) {
+                        if(inBounds(x+a,i+b)) {
+                            if(grid.get(x+a,i+b) = 1) {
+                                return false;
+                            }
+                        }
+                        let b = b + 1;
+                    }
+                    let a = a + 1;
+                }
+                let i = i + 1;
+            }
+            let i = y;
+            while ( i < (y + size )) {
+                do grid.set(1,x,i);
+                do drawGridCell(x,i);
+                let i = i + 1;
+            }
+        }
+        let countShips = countShips + 1;
+        return true;
+    }
+
+    method int getAliveShipNum(){
+        return countShips;
+    }
+
+    method void drawCoursoreCell(int i, int j) {
         var int pos ;
         if (~inBounds(i,j)) {
             return;
@@ -87,7 +339,7 @@ class Board {
             do Front.drawXPoint(pos);
         }
         if (grid.get(i,j) = 3) { // damaged ship
-            do Front.smallCubeWithPoint(pos);
+            do Front.drawBlackCircleWithPoint(pos);
         }
         if (grid.get(i,j) = 4) { // drown ship
             do Front.whitePoint(pos);
@@ -95,10 +347,31 @@ class Board {
         return;
     }
 
-    method void placeShip(int i,int j){
-        do grid.set(1,i,j);
-        do Front.drawCircleWithPoint(loc + i + (j*512));
+    method void placeShipCell(int i,int j) {
+        if (grid.get(i,j) = 0){
+            do grid.set(1,i,j);
+            do Front.drawCircleWithPoint(loc + i + (j*512));
+        }
+        // if (grid.get(i,j) = 1){
+        //     do grid.set(0,i,j);
+        //     do Front.drawCell(loc + i + (j*512));
+        // }
+        
         return;
+    }
+    
+    method void clearGrid() {
+        var int i, j;
+        let i = 0;
+        while (i < 10) {
+            let j = 0;
+            while (j < 10) {
+                do grid.set(0,i,j);
+                let j = j + 1;   
+            }
+            let i = i + 1;   
+        }
+        return;    
     }
 
     method void dispose() {

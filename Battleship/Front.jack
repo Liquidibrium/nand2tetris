@@ -294,4 +294,47 @@ function void ShipPointWithX(int location) {
         do Memory.poke(memAddress+480, -1);
         return;
     }
+
+    function void drawBlackCircleWithPoint(int location) {
+        let memAddress = 16384+location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -31807);
+        do Memory.poke(memAddress+64, -28687);
+        do Memory.poke(memAddress+96, -24583);
+        do Memory.poke(memAddress+128, -16387);
+        do Memory.poke(memAddress+160, -16771);
+        do Memory.poke(memAddress+192, -961);
+        do Memory.poke(memAddress+224, -2017);
+        do Memory.poke(memAddress+256, -2017);
+        do Memory.poke(memAddress+288, -961);
+        do Memory.poke(memAddress+320, -16771);
+        do Memory.poke(memAddress+352, -16387);
+        do Memory.poke(memAddress+384, -24583);
+        do Memory.poke(memAddress+416, -28687);
+        do Memory.poke(memAddress+448, -31807);
+        do Memory.poke(memAddress+480, -1);
+        return;
+    }
+
+    function void drawBlackCircle(int location) {
+        let memAddress = 16384+location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -31807);
+        do Memory.poke(memAddress+64, -28687);
+        do Memory.poke(memAddress+96, -24583);
+        do Memory.poke(memAddress+128, -16387);
+        do Memory.poke(memAddress+160, -16387);
+        do Memory.poke(memAddress+192, -1);
+        do Memory.poke(memAddress+224, -1);
+        do Memory.poke(memAddress+256, -1);
+        do Memory.poke(memAddress+288, -1);
+        do Memory.poke(memAddress+320, -16387);
+        do Memory.poke(memAddress+352, -16387);
+        do Memory.poke(memAddress+384, -24583);
+        do Memory.poke(memAddress+416, -28687);
+        do Memory.poke(memAddress+448, -31807);
+        do Memory.poke(memAddress+480, -1);
+        return;
+    }
+
 }
