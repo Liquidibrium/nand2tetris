@@ -1,0 +1,105 @@
+class Bot{
+
+    field Board board;
+    field bool itsAItime;
+    field bool missedLastShoot;
+    field Point prev, curr;
+    field int numShips;
+    constructor Bot new(Board playerBoard, int numShips){
+        let board = playerBoard;
+        let itsAItime = false;
+        let missedLastShoot = false;
+        let numShips = 7;
+        return this;
+    }
+
+    method bool blowUpShipInDir(int x,int y,int di, int dj) {
+        while (numShips = board.getAliveShipNum()){
+            let x = x + di;
+            let y = y + dj;
+            if(~board.shootCell(x,y)) {
+                let curr = Point.new(x,y); 
+                let missedLastShoot = true;
+                return false;
+            }
+        }
+        let numShips = board.getAliveShipNum();
+        let itsAItime = false;
+        return true;
+    }
+
+    method bool shootAround(int x,int y) {
+        if (board.inBounds(x-1, y)) {
+            if (~board.isMissedCell(x-1, y)) {
+                return blowUpShipInDir(x,y,-1,0);
+            }
+        }
+        if (board.inBounds(x+1, y)) {
+            if (~board.isMissedCell(x+1, y)) {
+                return blowUpShipInDir(x,y,1,0);
+            }
+        }
+        
+        if (board.inBounds(x, y-1)) {
+            if (~board.isMissedCell(x, y-1)) {
+                return blowUpShipInDir(x,y,0,-1);
+            }
+        }
+
+        if (board.inBounds(x, y+1)) {
+            if (~board.isMissedCell(x, y+1)) {
+                return blowUpShipInDir(x,y,0,1);
+            }
+        }
+        return false;
+    }
+
+    method bool shoot() {
+        var int dx,dy,x,y;
+        if(~itsAItime) { // just random 
+            let prev = Random.getPoint();
+            while (board.isMissedCell(prev.getX(),prev.getY()) | board.isBlownUpCell(prev.getX(),prev.getY())){
+                do prev.dispose();
+                let prev = Random.getPoint();
+            }
+            let itsAItime = board.shootCell(prev.getX(), prev.getY());
+        }
+        if(itsAItime) {
+            let x = prev.getX();
+            let y = prev.getY();
+            if(missedLastShoot) {
+                let dx = x - curr.getX();
+                let dy = y - curr.getY();
+                // left ships parts in another end 
+                if (dx < -1) {
+                    do blowUpShipInDir(x,y,-1,0);
+                    return true;
+                }
+                if (dx > 1) {
+                    do blowUpShipInDir(x,y,1,0);
+                    return true;
+                }
+                if (dy < -1) {
+                    do blowUpShipInDir(x,y,0,-1);
+                    return true;
+                }
+                if (dy > 1) {
+                    do blowUpShipInDir(x,y,0,1);
+                    return true;
+                }
+                // missed around
+                // if ((dx = -1) | (dx = 1) | (dy = -1) |(dy = 1)) {
+                //     do shootAround(x,y);
+                //     return true;
+                // }
+            }
+            // if(~missedLastShoot) {
+            if(shootAround(x,y)) {
+            }
+
+            // }
+        }
+        return itsAItime;
+    }
+
+}

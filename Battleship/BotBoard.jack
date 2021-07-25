@@ -1,7 +1,0 @@
-class BotBoard {
-
-    constructor BotBoard new(){
-        return this;
-    }
-    
-}

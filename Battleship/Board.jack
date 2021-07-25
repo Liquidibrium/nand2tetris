@@ -32,6 +32,15 @@ class Board {
         return (x > -1) & (y > -1) & (x < 10) & (y < 10); 
     }
 
+    method bool isMissedCell(int i, int j){
+        return grid.get(i,j) = 2;
+    }
+    
+
+    method bool isBlownUpCell(int i, int j){
+        return grid.get(i,j) = 4;
+    }
+
     method void drawGridCell(int i, int j) {
         var int pos ;
         if (~inBounds(i,j)) {
@@ -141,13 +150,18 @@ class Board {
         var int di,dj;
         var bool noBreak;
         do grid.set(4,i,j);
-        do Front.whitePoint(getPosition(i , j));
+        if(~player) {
+            do Front.whitePoint(getPosition(i, j));
+        }
+        if(player) {
+            do Front.drawBlack(getPosition(i, j));
+        }
 
         let di = 1;
         let dj = 0;
         let noBreak = true;
-        while(noBreak & inBounds(i+di,j+dj)) {
-            if (grid.get(i+di,j + dj) = 3) {
+        while(noBreak & inBounds(i + di, j + dj)) {
+            if (grid.get(i + di, j + dj) = 3) {
                 do grid.set(4,i + di, j + dj);
                 do Front.drawBlack(getPosition(i + di, j + dj));
             }
@@ -163,15 +177,15 @@ class Board {
         let di = -1;
         let dj = 0;
         let noBreak = true;
-        while(noBreak & inBounds(i+di,j+dj)) {
-            if (grid.get(i+di,j + dj) = 3) {
-                do grid.set(4,i + di, j + dj);
+        while(noBreak & inBounds(i + di, j + dj)) {
+            if (grid.get(i + di, j + dj) = 3) {
+                do grid.set(4, i + di, j + dj);
                 do Front.drawBlack(getPosition(i + di, j + dj));
             }
-            if(grid.get(i+di,j + dj) = 0){
+            if(grid.get(i+di, j + dj) = 0){
                 let noBreak = false;
             }
-            if(grid.get(i+di,j + dj) = 2){
+            if(grid.get(i+di, j + dj) = 2){
                 let noBreak = false;
             }
             let di = di - 1;
@@ -180,9 +194,9 @@ class Board {
         let di = 0;
         let dj = 1;
         let noBreak = true;
-        while(noBreak & inBounds(i+di,j+dj)) {
-             if (grid.get(i+di,j + dj) = 3) {
-                do grid.set(4,i + di, j + dj);
+        while(noBreak & inBounds(i+di, j+dj)) {
+             if (grid.get(i + di, j + dj) = 3) {
+                do grid.set(4, i + di, j + dj);
                 do Front.drawBlack(getPosition(i + di, j + dj));
             }
             if(grid.get(i+di,j + dj) = 0){
@@ -221,13 +235,24 @@ class Board {
         let pos = loc + i + (j*512);
         if(grid.get(i,j) = 0) {
             do grid.set(2,i,j);
-            do Front.drawXPoint(pos);
+            if(~player) {
+                do Front.drawXPoint(pos);
+            }
+            if(player) {
+                do Front.drawX(pos);
+            }
+ 
             return false;
         }
 
         if(grid.get(i,j) = 1) {
             do grid.set(3,i,j);
-            do Front.drawBlackCircleWithPoint(pos);
+            if(~player){
+                do Front.drawBlackCircleWithPoint(pos);
+            }
+            if(player){
+                do Front.drawBlackCircle(pos);
+            }
             if (checkIfBlownUp(i,j)) {
                 let countShips = countShips - 1;
                 do blowUp(i,j);

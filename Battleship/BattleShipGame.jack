@@ -3,7 +3,7 @@ class BattleShipGame {
     field Board botBoard;
     field Board playerBoard;
     field bool turn;
-
+    field Bot AI;
     constructor BattleShipGame new() {
         let dx = 0;
         let dy = 0;
@@ -13,7 +13,7 @@ class BattleShipGame {
         let location = 1024+4;
         let playerBoard = Board.new(location, true);
         let botBoard = Board.new(location + 10 + 4, false);
-        
+        let AI = Bot.new(playerBoard,7);
         let turn = true; // players Turn
         do init();
         return this;
@@ -184,7 +184,6 @@ class BattleShipGame {
 
     method void placeShips() {
         do moveCoursor(true);
-
         return;
     }
     
@@ -205,6 +204,7 @@ class BattleShipGame {
             }
             if (~turn){
                 // bot shoot 
+                do AI.shoot();
                 let turn = true;
             }
         }
