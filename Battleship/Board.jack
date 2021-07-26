@@ -372,6 +372,138 @@ class Board {
         return;
     }
 
+    method bool getShips(ArrayList arr,int x, int y, int dx, int dy) {
+        var int size; 
+        let size = 1;
+        while(inBounds(x+dx, y+dy)) {
+            let x = x + dx;
+            let y = y + dy;
+            if (~(grid.get(x , y) = 1)) {
+                do StringUtils.toString(size);
+                do Output.println();
+                do arr.add(size);
+                return true;        
+            }
+            do grid.set(-1,x,y);
+            let size = size + 1;
+            if (inBounds(x + 1, y + 1)) {
+                if (grid.get(x + 1, y + 1) = 1) {
+                    return false;
+                }
+            }
+            if (inBounds(x + dy, y + dx)) {
+                if (grid.get(x + dy, y + dx) = 1) {
+                    return false;
+                }
+            }
+            if (inBounds(x - 1, y + 1)) {
+                if (grid.get(x - 1, y + 1) = -1) {
+                    return false;
+                }
+            }
+        }
+        do arr.add(size);
+        return true;
+    }
+
+    method bool validateBoard() {
+        var int i, j, size, count;
+        var ArrayList ships;
+        var bool flag;
+        let ships = ArrayList.new(7,false);
+        let count = 0;
+        let i = 0;
+        while (i < 10) {
+            let j = 0;
+            while (j < 10) {
+                if(grid.get(i,j) = 1) {
+                    do StringUtils.toString(i);
+                    do Output.printString(" ");
+                    do StringUtils.toString(j);
+                    do Output.println();
+                    let flag = true;
+                    do grid.set(-1,i,j);
+                    if (inBounds(i + 1, j + 1)) {
+                        if (grid.get(i + 1,j +1) = 1) {
+                            return false;
+                        }
+                        if((grid.get(i, j + 1) = 1) & (grid.get(i + 1,j) = 1)) {
+                            return false;
+                        }
+                       
+                        
+                    }
+                    if(inBounds(i, j +1)) {
+                        if(grid.get(i, j + 1) = 1) {
+                                if (~getShips(ships,i,j,0,1)){
+                                    return false;
+                                }
+                                let flag = false;
+                            }
+                        
+                    }
+                    if(inBounds(i + 1, j)) {
+                        if(grid.get(i + 1, j) = 1) {
+                            if (~getShips(ships,i,j,1,0)){
+                                return false;
+                            }
+                            let flag = false;
+                        }
+                    }
+                    if (inBounds(i - 1, j + 1)) {
+                        if (grid.get(i - 1,j +1) = -1) {
+                            return false;
+                        }
+                    }
+                    if(flag) {
+                        do StringUtils.toString(1);
+                        do ships.add(1);
+                        // add one cell 
+                    }
+                }
+                let j = j + 1;   
+            }
+            let i = i + 1;   
+        }
+
+        if (~(ships.size() = 7)) {
+            return false;    
+        }
+        do ships.sortInts();
+        if(~(ships.get(0) = 1)) {
+            return false;
+        }
+        if(~(ships.get(1) = 1)) {
+            return false;
+        }
+        if(~(ships.get(2) = 2)) {
+            return false;
+        }
+        if(~(ships.get(3) = 2)) {
+            return false;
+        }
+        let i = 4;
+        while (i < 7) {
+            if(~(ships.get(i) = (i-1))) {
+                return false;
+            }
+            let i = i + 1;   
+        }
+        let countShips = 7;
+        let i = 0;
+        while (i < 10) {
+            let j = 0;
+            while (j < 10) {
+                if(grid.get(i,j) = -1) {
+                   do grid.set(1,i,j);
+                }
+                let j = j + 1;   
+            }
+            let i = i + 1;   
+        }
+        return true;
+    }
+
     method void placeShipCell(int i,int j) {
         if (grid.get(i,j) = 0){
             do grid.set(1,i,j);

@@ -38,10 +38,10 @@ class BattleShipGame {
         while (true) {
             let randPoint = Random.getPoint();
             let horizontal = Random.getBool();
-            do StringUtils.toString(randPoint.getX());
-            do StringUtils.toString(randPoint.getY());
-             do StringUtils.toString(size);
-             do Output.println();
+            // do StringUtils.toString(randPoint.getX());
+            // do StringUtils.toString(randPoint.getY());
+            //  do StringUtils.toString(size);
+            //  do Output.println();
             if(botBoard.placeShip(randPoint.getX(),randPoint.getY(),
                         horizontal,size)){
                 do randPoint.dispose();
@@ -63,27 +63,11 @@ class BattleShipGame {
         return;
     }
     
-    method bool inBounds(int x, int y){
-        return (x > -1) & (y > -1) & (x < 10) & (y < 10); 
-    }
-
-
-    method void moveCell(int key) {
-        return;
-    }
-    
-    method void selectCell() {
-        return;
-    }
 
     method void shootCell() {
         let turn = botBoard.shootCell(x,y);
             // 
         return;
-    }
-
-    method bool isValidGrid(){
-        return true;
     }
 
 
@@ -107,7 +91,7 @@ class BattleShipGame {
             let dy = 0;       
         }
         
-        if (inBounds(x+dx,y+dy)) {
+        if (board.inBounds(x+dx,y+dy)) {
             do board.drawGridCell(x,y);
             let x = x + dx;
             let y = y + dy;
@@ -119,11 +103,13 @@ class BattleShipGame {
     method bool translateKeyForPlayerBoard(int key) {
         if (key = 83) { // s stop
             do playerBoard.drawGridCell(x,y);
-            if(isValidGrid()) {
+            if(playerBoard.validateBoard()) {
                 return true;
             }
-            do playerBoard.clearGrid();
-            do playerBoard.drawBoard();
+            let x = 0;
+            let y = 0;
+            // do playerBoard.clearGrid();
+            // do playerBoard.drawBoard();
         }
         if (key = 128) { // enter
             // update board 
@@ -191,10 +177,10 @@ class BattleShipGame {
         let x = 0;
         let y = 0;
         while (true) {
-            // if(playerBoard.getAliveShipNum() = 0){
-            //     do Output.printString("You Lose the Game");
-            //     return;
-            // }
+            if(playerBoard.getAliveShipNum() = 0){
+                do Output.printString("You Lose the Game");
+                return;
+            }
             if(botBoard.getAliveShipNum() = 0){
                 do Output.printString("You Won the Game");
                 return;
