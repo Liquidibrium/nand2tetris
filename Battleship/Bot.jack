@@ -5,101 +5,185 @@ class Bot{
     field bool missedLastShoot;
     field Point prev, curr;
     field int numShips;
-    constructor Bot new(Board playerBoard, int numShips){
+
+    constructor Bot new(Board playerBoard, int numShip){
         let board = playerBoard;
         let itsAItime = false;
         let missedLastShoot = false;
-        let numShips = 7;
+        let numShips = numShip;
         return this;
     }
 
-    method bool blowUpShipInDir(int x,int y,int di, int dj) {
-        while (numShips = board.getAliveShipNum()){
-            let x = x + di;
-            let y = y + dj;
-            if(~board.shootCell(x,y)) {
-                let curr = Point.new(x,y); 
+    method int blowUpShipInDir(int x, int y, int dx, int dy) {
+        // var int tx, ty;
+        // let tx = x;
+        // let ty = y;
+        while (numShips = board.getAliveShipNum()) {
+            let x = x + dx;
+            let y = y + dy;
+            if (~board.inBounds(x, y)) {
+                return 1;
+            }
+            if (board.isMissedCell(x, y)) {
+                return 1;
+            }
+            if(~board.shootCell(x, y)) {
+                let curr = Point.new(x, y); 
                 let missedLastShoot = true;
-                return false;
+                return -1;
             }
         }
         let numShips = board.getAliveShipNum();
+        // let missedLastShoot = false;
         let itsAItime = false;
-        return true;
+        return 0;
     }
 
-    method bool shootAround(int x,int y) {
-        if (board.inBounds(x-1, y)) {
-            if (~board.isMissedCell(x-1, y)) {
-                return blowUpShipInDir(x,y,-1,0);
-            }
-        }
-        if (board.inBounds(x+1, y)) {
-            if (~board.isMissedCell(x+1, y)) {
-                return blowUpShipInDir(x,y,1,0);
-            }
-        }
-        
-        if (board.inBounds(x, y-1)) {
-            if (~board.isMissedCell(x, y-1)) {
-                return blowUpShipInDir(x,y,0,-1);
-            }
-        }
-
-        if (board.inBounds(x, y+1)) {
-            if (~board.isMissedCell(x, y+1)) {
-                return blowUpShipInDir(x,y,0,1);
+    method bool inLine(int x, int y, int dx, int dy) {
+        var int res;
+        if (board.inBounds(x + dx, y + dy)) {
+            if (~board.isMissedCell(x + dx, y + dy)) {
+                let res = blowUpShipInDir(x, y, dx, dy);
+                if (res = -1) {
+                    return false;
+                }
+                if (res = 0) {
+                    return true;
+                }
+                if (res = 1) {
+                    if(blowUpShipInDir(x, y, -dx, -dy) = -1) {
+                        do Output.printString("error direc");
+                    }
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    method bool shoot() {
-        var int dx,dy,x,y;
-        if(~itsAItime) { // just random 
-            let prev = Random.getPoint();
-            while (board.isMissedCell(prev.getX(),prev.getY()) | board.isBlownUpCell(prev.getX(),prev.getY())){
-                do prev.dispose();
-                let prev = Random.getPoint();
-            }
-            let itsAItime = board.shootCell(prev.getX(), prev.getY());
-        }
-        if(itsAItime) {
-            let x = prev.getX();
-            let y = prev.getY();
-            if(missedLastShoot) {
-                let dx = x - curr.getX();
-                let dy = y - curr.getY();
-                // left ships parts in another end 
-                if (dx < -1) {
-                    do blowUpShipInDir(x,y,-1,0);
-                    return true;
-                }
-                if (dx > 1) {
-                    do blowUpShipInDir(x,y,1,0);
-                    return true;
-                }
-                if (dy < -1) {
-                    do blowUpShipInDir(x,y,0,-1);
-                    return true;
-                }
-                if (dy > 1) {
-                    do blowUpShipInDir(x,y,0,1);
-                    return true;
-                }
-                // missed around
-                // if ((dx = -1) | (dx = 1) | (dy = -1) |(dy = 1)) {
-                //     do shootAround(x,y);
-                //     return true;
-                // }
-            }
-            // if(~missedLastShoot) {
-            if(shootAround(x,y)) {
-            }
 
-            // }
+
+    method bool shootAround(int x, int y) {
+        var int res;
+        if (board.inBounds(x - 1, y)) {
+            if (~board.isMissedCell(x - 1, y)) {
+                return inLine(x, y, -1, 0);
+            }
         }
-        return itsAItime;
+        if (board.inBounds(x + 1, y)) {
+            if (~board.isMissedCell(x + 1, y)) {
+               return inLine(x, y, 1, 0);
+            }
+        }
+        
+        if (board.inBounds(x, y - 1)) {
+            if (~board.isMissedCell(x, y - 1)) {
+                return inLine(x, y, 0, -1);
+            }
+        }
+
+        if (board.inBounds(x, y + 1)) {
+            if (~board.isMissedCell(x, y + 1)) {
+                return inLine(x, y, 0, 1);
+            }
+        }
+        return false;
     }
 
+    method bool AIshoot(){
+        var int dx, dy, x, y;
+        let x = prev.getX();
+        let y = prev.getY();
+        // do prev.dispose();
+        if(missedLastShoot) {
+            let dx = x - curr.getX();
+            let dy = y - curr.getY();
+            // do curr.dispose();
+            // left ships parts in another end 
+            if (dx < -1) {
+                if (board.inBounds(x - 1, y)) {
+                    if (~board.isMissedCell(x - 1, y)) {
+                        if(inLine(x, y, -1, 0)) {
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+            }
+            if (dx > 1) {
+                if (board.inBounds(x + 1, y)){
+                    if (~board.isMissedCell(x + 1, y)) {
+                        if(inLine(x, y, 1, 0)) {
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+            }
+            if (dy < -1) {
+                if (board.inBounds(x, y - 1)){
+                    if (~board.isMissedCell(x , y - 1)) {
+                        if(inLine(x, y, 0, -1)) {
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+            }
+            if (dy > 1) {
+                if (board.inBounds(x, y + 1)) {
+                    if (~board.isMissedCell(x, y + 1)) {
+                        if(inLine(x, y, 0, 1)) {
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+            }
+            // missed around
+        }
+        return shootAround(x,y);
+    }
+
+    method bool randomShoot() {
+        var bool res;
+        let prev = Random.getPoint();
+        while (board.isMissedCell(prev.getX(),prev.getY())
+            | board.isBlownUpCell(prev.getX(),prev.getY())) {
+            do prev.dispose();
+            let prev = Random.getPoint();
+        }
+        let res = board.shootCell(prev.getX(), prev.getY());
+        if (res) {
+            if (board.getAliveShipNum() < numShips) {
+                let numShips = board.getAliveShipNum();
+                return true;
+            }
+            let itsAItime = res;
+        }
+        return false;
+    }
+
+    // return true if destroies ship or there is nothing to destroy
+    method bool shoot() {
+        if (numShips = 0) {
+            return true;
+        }
+        // do StringUtils.toString(numShips);
+        if(~itsAItime) { // just random 
+            if(randomShoot()) {
+                return true;
+            }
+        }
+        if (itsAItime) {
+            return AIshoot();
+        }
+        return false;
+    }
+
+    
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
 }

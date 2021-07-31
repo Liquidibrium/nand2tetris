@@ -9,4 +9,12 @@ class StringUtils {
         return;
     }
 
+    function void to(int i, int j){
+        do StringUtils.toString(i);
+        do Output.printString(" ");
+        do StringUtils.toString(j);
+        do Output.println();
+        return;
+    }
+
 }
