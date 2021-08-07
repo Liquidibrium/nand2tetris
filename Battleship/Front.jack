@@ -2,26 +2,27 @@
 class Front {
     static int memAddress;
 
-function void ShipPointWithX(int location) {
-	let memAddress = 16384+location;
-	do Memory.poke(memAddress+0, -1);
-	do Memory.poke(memAddress+32, -16381);
-	do Memory.poke(memAddress+64, -16387);
-	do Memory.poke(memAddress+96, -20467);
-	do Memory.poke(memAddress+128, -20491);
-	do Memory.poke(memAddress+160, -21451);
-	do Memory.poke(memAddress+192, -21547);
-	do Memory.poke(memAddress+224, -21547);
-	do Memory.poke(memAddress+256, -21547);
-	do Memory.poke(memAddress+288, -21547);
-	do Memory.poke(memAddress+320, -21451);
-	do Memory.poke(memAddress+352, -20491);
-	do Memory.poke(memAddress+384, -20467);
-	do Memory.poke(memAddress+416, -16387);
-	do Memory.poke(memAddress+448, -16381);
-	do Memory.poke(memAddress+480, -1);
-	return;
-}
+    function void ShipPointWithX(int location) {
+        let memAddress = 16384+location;
+        do Memory.poke(memAddress+0, -1);
+        do Memory.poke(memAddress+32, -16381);
+        do Memory.poke(memAddress+64, -16387);
+        do Memory.poke(memAddress+96, -20467);
+        do Memory.poke(memAddress+128, -20491);
+        do Memory.poke(memAddress+160, -21451);
+        do Memory.poke(memAddress+192, -21547);
+        do Memory.poke(memAddress+224, -21547);
+        do Memory.poke(memAddress+256, -21547);
+        do Memory.poke(memAddress+288, -21547);
+        do Memory.poke(memAddress+320, -21451);
+        do Memory.poke(memAddress+352, -20491);
+        do Memory.poke(memAddress+384, -20467);
+        do Memory.poke(memAddress+416, -16387);
+        do Memory.poke(memAddress+448, -16381);
+        do Memory.poke(memAddress+480, -1);
+        return;
+    }
+    
     function void aliveShipPoint(int location) {
         let memAddress = 16384+location;
         do Memory.poke(memAddress+0, -1);

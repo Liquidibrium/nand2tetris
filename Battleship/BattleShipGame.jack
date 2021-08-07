@@ -144,7 +144,7 @@ class BattleShipGame {
     }
 
     method bool makeMove(int key, bool placeShip) {
-        do Sys.wait(50);
+        do Sys.wait(70);
         if (placeShip) {
             if(translateKeyForPlayerBoard(key)) {
                 return true;

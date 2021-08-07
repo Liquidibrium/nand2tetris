@@ -34,7 +34,7 @@ class Bot{
             }
         }
         let numShips = board.getAliveShipNum();
-        // let missedLastShoot = false;
+        let missedLastShoot = false;
         let itsAItime = false;
         return 0;
     }
